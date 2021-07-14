@@ -1,0 +1,19 @@
+.banner {
+  width: 100%;
+  border-bottom: 3px solid rgb(76, 75, 116);
+  border-top: 3px solid rgb(76, 75, 116);
+}
+
+.link {
+  color: blue;
+}
+
+.quote {
+  color: grey;
+  font-size: 1.5rem;
+}
+
+.center {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
