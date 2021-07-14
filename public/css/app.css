@@ -1,17 +1,21 @@
-.sticky-bottom {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 92vh;
-  z-index: 1020;
+HTML,
+body {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.footer-margin {
+  height: 64px;
 }
 
 .icon-navbar {
   height: 32px;
   width: 32px;
-}
-
-.main {
-  min-height: 75vh;
 }
 
 .invalid-feedback {

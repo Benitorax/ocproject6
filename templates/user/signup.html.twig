@@ -3,14 +3,14 @@
 {% block title %}Sign up{% endblock %}
 
 {% block body %}
-    <div class="container main">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-9 col-lg-6">
                 <h1 class="text-center mb-5 d-none d-md-block">Registration</h1>
                 <div class="card mx-auto text-center">
                     <div class="card-body">
                         <h1 class="card-title my-3 d-block d-md-none">Registration</h1>
-                        {{ form_start(form, {'attr': {'class': 'row my-5'}}) }}
+                        {{ form_start(form, {'attr': {'class': 'row my-5 my-md-3'}}) }}
                             <div class="col-12 col-md-9 mx-auto text-center">
                                 <div class="mb-3">
                                     <label class="form-label" for="username">Username</label>
@@ -38,7 +38,7 @@
                                 <button type="submit" class="btn btn-primary">Create an account</button>
                             </div>
                         {{ form_end(form) }}
-                        <a href="#">Already an account?</a>
+                        <div class="mb-2"><a href="#">Already an account?</a></div>
                     </div>
                 </div>
             </div>
