@@ -17,13 +17,12 @@ class Mailer
         $this->mailer = $mailer;
     }
 
-    public function sendSignupEmail(User $user, UserPublicToken $token)
+    public function sendSignupEmail(User $user, UserPublicToken $token): void
     {
         $email = $this->createTemplatedEmail('Thanks for signing up!', $user)
             ->htmlTemplate('email/signup.html.twig')
             ->context([
                 'token' => $token,
-                'user' => $user,
             ])
         ;
 
@@ -33,7 +32,7 @@ class Mailer
     private function createTemplatedEmail(string $subject, User $user): TemplatedEmail
     {
         return (new  TemplatedEmail())
-            ->to(new Address($user->getEmail(), $user->getUsername()))
+            ->to(new Address((string) $user->getEmail(), $user->getUsername()))
             ->subject($subject);
     }
 }

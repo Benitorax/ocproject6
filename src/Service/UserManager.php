@@ -20,8 +20,7 @@ class UserManager
         EntityManagerInterface $entityManager,
         UserTokenManager $tokenManager,
         Mailer $mailer
-    )
-    {
+    ) {
         $this->passwordHasher = $passwordHasher;
         $this->entityManager = $entityManager;
         $this->tokenManager = $tokenManager;

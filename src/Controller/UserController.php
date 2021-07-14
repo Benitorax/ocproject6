@@ -28,8 +28,8 @@ class UserController extends AbstractController
             $user = $form->getData();
             $userManager->saveNewUser($user);
             $this->addFlash(
-                'success', 
-                'Thanks for registration, an confirmation email has been sent to your address.'
+                'success',
+                'Thanks for registration, a confirmation email has been sent to your address.'
             );
 
             return $this->redirectToRoute('user_create');
@@ -44,11 +44,10 @@ class UserController extends AbstractController
      * @Route("/account/activate/{token}", name="user_activate")
      */
     public function activate(
-        string $token, 
+        string $token,
         UserTokenManager $tokenManager,
         UserManager $userManager
-    ): Response
-    {
+    ): Response {
         try {
             $user = $tokenManager->validateTokenAndFetchUser(UserToken::SIGNUP, $token);
         } catch (\Exception $exception) {
@@ -56,7 +55,7 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user_create');
         }
-        
+
         $userManager->activate($user);
 
         return $this->redirectToRoute('login');

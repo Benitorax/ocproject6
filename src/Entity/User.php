@@ -29,7 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @Assert\Length(
@@ -40,12 +40,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * )
      * @ORM\Column(type="string", length=60, unique=true)
      */
-    private $username;
+    private string $username;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @Assert\Email(
@@ -57,7 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * )
      * @ORM\Column(type="string", length=255, unique=true)
      */
-    private $email;
+    private string $email;
 
     public function getId(): ?int
     {
@@ -71,17 +71,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      minMessage = "Your password must be at least {{ limit }} characters long.",
      *      maxMessage = "Your password cannot be longer than {{ limit }} characters."
      * )
-     * @var string The hashed password
      * @ORM\Column(type="string", length=255)
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isActivated = false;
+    private bool $isActivated = false;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity=UserToken::class, mappedBy="user", orphanRemoval=true)
      */
     private $tokens;
@@ -143,7 +143,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    
+
     /**
      * @see PasswordAuthenticatedUserInterface
      */
@@ -173,7 +173,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
@@ -197,27 +197,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getTokens(): Collection
     {
         return $this->tokens;
-    }
-
-    public function addToken(UserToken $token): self
-    {
-        if (!$this->tokens->contains($token)) {
-            $this->tokens[] = $token;
-            $token->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeToken(UserToken $token): self
-    {
-        if ($this->tokens->removeElement($token)) {
-            // set the owning side to null (unless already changed)
-            if ($token->getUser() === $this) {
-                $token->setUser(null);
-            }
-        }
-
-        return $this;
     }
 }

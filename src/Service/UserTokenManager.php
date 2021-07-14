@@ -22,15 +22,14 @@ class UserTokenManager
      * How long a token is valid in seconds
      */
     private int $resetRequestLifetime = 60 * 60;
-    
+
     private EntityManagerInterface $entityManager;
     private UserTokenRepository $repository;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         UserTokenRepository $repository
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->repository = $repository;
     }
@@ -38,27 +37,19 @@ class UserTokenManager
     /**
      * Creates a UserToken and returns a public token.
      */
-    public function create(int $type, User $user)
+    public function create(int $type, User $user): UserPublicToken
     {
         $expiredAt = new \DateTimeImmutable(sprintf('+%d seconds', $this->resetRequestLifetime));
         $selector = $this->getRandomAlphaNumStr();
         $verifier = $this->getRandomAlphaNumStr();
-        $hashedToken = $this->getHashedToken($expiredAt, $user->getId(), $verifier);
-
-        $token = (new UserToken())
-            ->setType($type)
-            ->setUser($user)
-            ->setExpiredAt($expiredAt)
-            ->setSelector($selector)
-            ->setHashedToken($hashedToken)
-        ;
-
+        $hashedToken = $this->getHashedToken($expiredAt, (int) $user->getId(), $verifier);
+        $token = new UserToken($type, $user, $expiredAt, $selector, $hashedToken);
         $this->ensureOneTokenInDatabase($token);
 
         return new UserPublicToken($selector . $verifier, $expiredAt);
     }
 
-    public function validateTokenAndFetchUser(int $type, string $token)
+    public function validateTokenAndFetchUser(int $type, string $token): User
     {
         if (40 !== \strlen($token)) {
             throw $this->createException($type, self::INVALID_TOKEN_MESSAGE);
@@ -76,9 +67,13 @@ class UserTokenManager
 
         $user = $userToken->getUser();
 
+        if (!$user instanceof User) {
+            throw $this->createException($type, self::INVALID_TOKEN_MESSAGE);
+        }
+
         $hashedToken = $this->getHashedToken(
             $userToken->getExpiredAt(),
-            $user->getId(),
+            (int) $user->getId(),
             substr($token, self::SELECTOR_LENGTH)
         );
 
@@ -91,7 +86,7 @@ class UserTokenManager
 
     private function createException(int $type, string $message): \Exception
     {
-        if(UserToken::SIGNUP === $type) {
+        if (UserToken::SIGNUP === $type) {
             return new \Exception($message . ' First create an account.');
         }
 
@@ -135,13 +130,13 @@ class UserTokenManager
     /**
      * Returns a UserToken or null.
      */
-    private function getUserToken(string $type, string $token): ?UserToken
+    private function getUserToken(int $type, string $token): ?UserToken
     {
         $selector = substr($token, 0, self::SELECTOR_LENGTH);
 
         return $this->repository->findOneBy(['type' => $type, 'selector' => $selector]);
     }
-    
+
     private function ensureOneTokenInDatabase(UserToken $token): void
     {
         $this->deleteTokensFromUser($token->getUser());
@@ -149,11 +144,11 @@ class UserTokenManager
         $this->entityManager->flush();
     }
 
-    public function deleteTokensFromUser(User $user)
+    public function deleteTokensFromUser(User $user): void
     {
-        $tokens = $this->repository->findBy(['user' => $user]);
+        $tokens = $user->getTokens();
 
-        foreach($tokens as $token) {
+        foreach ($tokens as $token) {
             $this->entityManager->remove($token);
         }
 

@@ -2,58 +2,70 @@
 
 namespace App\Entity;
 
-use App\Repository\UserTokenRepository;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserTokenRepository;
 
 /**
  * @ORM\Entity(repositoryClass=UserTokenRepository::class)
  */
 class UserToken
 {
-    const SIGNUP = 1;
-    const RESET_PASSWORD = 2;
+    public const SIGNUP = 1;
+    public const RESET_PASSWORD = 2;
 
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
+     * SIGNUP or RESET_PASSWORD value.
      * @ORM\Column(type="smallint")
      */
-    private $type;
+    private int $type;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tokens")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private User $user;
 
     /**
      * @ORM\Column(type="string", length=20)
      */
-    private $selector;
+    private string $selector;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $hashed_token;
+    private string $hashedToken;
 
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private $requestedAt;
+    private \DateTimeImmutable $requestedAt;
 
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private $expiredAt;
+    private \DateTimeImmutable $expiredAt;
 
-    public function __construct()
-    {
+    public function __construct(
+        int $type,
+        User $user,
+        \DateTimeImmutable $expiredAt,
+        string $selector,
+        string $hashedToken
+    ) {
         $this->requestedAt = new \DateTimeImmutable('now');
+        $this->type = $type;
+        $this->user = $user;
+        $this->expiredAt = $expiredAt;
+        $this->selector = $selector;
+        $this->hashedToken = $hashedToken;
     }
 
     public function getId(): ?int
@@ -61,7 +73,7 @@ class UserToken
         return $this->id;
     }
 
-    public function getType(): ?int
+    public function getType(): int
     {
         return $this->type;
     }
@@ -72,20 +84,20 @@ class UserToken
 
         return $this;
     }
-    
-    public function getUser(): ?User
+
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getSelector(): ?string
+    public function getSelector(): string
     {
         return $this->selector;
     }
@@ -97,19 +109,19 @@ class UserToken
         return $this;
     }
 
-    public function getHashedToken(): ?string
+    public function getHashedToken(): string
     {
-        return $this->hashed_token;
+        return $this->hashedToken;
     }
 
-    public function setHashedToken(string $hashed_token): self
+    public function setHashedToken(string $hashedToken): self
     {
-        $this->hashed_token = $hashed_token;
+        $this->hashedToken = $hashedToken;
 
         return $this;
     }
 
-    public function getRequestedAt(): ?\DateTimeImmutable
+    public function getRequestedAt(): \DateTimeImmutable
     {
         return $this->requestedAt;
     }
@@ -121,7 +133,7 @@ class UserToken
         return $this;
     }
 
-    public function getExpiredAt(): ?\DateTimeImmutable
+    public function getExpiredAt(): \DateTimeImmutable
     {
         return $this->expiredAt;
     }
