@@ -32,6 +32,7 @@ class Mailer
     private function createTemplatedEmail(string $subject, User $user): TemplatedEmail
     {
         return (new  TemplatedEmail())
+            ->from(new Address('contact@snowtricks.com', 'SnowTricks'))
             ->to(new Address((string) $user->getEmail(), $user->getUsername()))
             ->subject($subject);
     }

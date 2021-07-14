@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-9 col-lg-6">
+                <h1 class="text-center mb-5 d-none d-md-block">Login</h1>
+                <div class="card mx-auto text-center">
+                    <div class="card-body">
+                        <h1 class="card-title my-3 d-block d-md-none">Login</h1>
+                        <form class="row my-5 my-md-3" method="POST">
+                            {% if error %}
+                                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            {% endif %}
+
+                            {% if app.user %}
+                                <div class="mb-3">
+                                    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                                </div>
+                            {% endif %}
+                            <div class="col-12 col-md-9 mx-auto text-center">
+                                <div class="mb-3">
+                                    <label class="form-label" for="username">Username</label>
+                                    <input class="form-control" id="username" name="username" type="text"  value="{{ last_username }}" style="text-align: center;" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="password">Password</label>
+                                    <input class="form-control" id="password" name="password" type="password" autocomplete="current-password" style="text-align: center;" required> 
+                                </div>
+                            </div>
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                            <div class="col-12 my-2">
+                                <div class="mb-3"><a href="#">Already an account?</a></div>
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

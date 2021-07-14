@@ -32,7 +32,7 @@ class UserController extends AbstractController
                 'Thanks for registration, a confirmation email has been sent to your address.'
             );
 
-            return $this->redirectToRoute('user_create');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('user/signup.html.twig', [
@@ -58,6 +58,6 @@ class UserController extends AbstractController
 
         $userManager->activate($user);
 
-        return $this->redirectToRoute('login');
+        return $this->redirectToRoute('app_login');
     }
 }
