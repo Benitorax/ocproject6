@@ -13,3 +13,7 @@
 .main {
   min-height: 75vh;
 }
+
+.invalid-feedback {
+  display: block;
+}

@@ -2,13 +2,23 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(
+ *     "username",
+ *     message = "This username is already used."
+ * )
+ * @UniqueEntity(
+ *     "email",
+ *     message = "This email is already used."
+ * )
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -20,7 +30,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 60,
+     *      minMessage = "Your username must be at least {{ limit }} characters long.",
+     *      maxMessage = "Your username cannot be longer than {{ limit }} characters."
+     * )
+     * @ORM\Column(type="string", length=60, unique=true)
      */
     private $username;
 
@@ -30,7 +46,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $roles = [];
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email."
+     * )
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "Your email cannot be longer than {{ limit }} characters."
+     * )
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $email;
 
@@ -40,8 +63,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 100,
+     *      minMessage = "Your password must be at least {{ limit }} characters long.",
+     *      maxMessage = "Your password cannot be longer than {{ limit }} characters."
+     * )
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=255)
      */
     private $password;
 
