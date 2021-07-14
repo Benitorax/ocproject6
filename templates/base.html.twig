@@ -19,7 +19,7 @@
         {% endblock %}
     </head>
     <body>
-        <header class="d-none d-md-block mb-5">
+        <header class="d-none d-md-block">
             <nav class="navbar navbar-expand navbar-dark bg-dark sticky-top">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#">SnowTricks</a>
@@ -87,7 +87,14 @@
                 {% endif %}
             </div>
         </nav>
-
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} text-center" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        <div class="d-none d-md-block mb-5"></div>
         {% block body %}{% endblock %}
         <footer class="navbar navbar-light bg-light mt-5">
             <div class="container-fluid">

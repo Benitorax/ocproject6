@@ -31,7 +31,7 @@
                                     {% for error in form.password.vars.errors %}
                                         <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
                                     {% endfor %}
-                                    {{ form_widget(form.password, {'attr': {'class': 'form-control is-invalid', 'id': 'password', 'style': 'text-align: center;'}}) }}    
+                                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'id': 'password', 'style': 'text-align: center;'}}) }}    
                                 </div>
                             </div>
                             <div class="col-12 mt-5">
