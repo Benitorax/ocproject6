@@ -18,6 +18,24 @@ body {
   width: 32px;
 }
 
+.icon-navigation {
+  height: 64px;
+  width: 64px;
+}
+
+.sticky-bottom {
+  position: sticky;
+  bottom: 0;
+  float: right;
+  z-index: 1200;
+}
+
 .invalid-feedback {
   display: block;
+}
+
+.test {
+  position: absolute !important;
+  bottom: 0 !important;
+  right: 0 !important;
 }
