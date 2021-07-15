@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
-use App\Form\ResetPasswordRequestType;
+use App\Entity\UserToken;
 use App\Service\UserManager;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\ResetPasswordType;
+use App\Form\ResetPasswordRequestType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -38,7 +40,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/reset-password/request", name="app_password_request")
+     * @Route("/forgot_password", name="app_password_request")
      */
     public function resetPasswordRequest(Request $request, UserManager $userManager): Response
     {
@@ -63,6 +65,38 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/reset_password_request.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/reset_password/{token}", name="app_password_reset")
+     */
+    public function resetPassword(string $token, Request $request, UserManager $userManager): Response
+    {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_homepage');
+        }
+
+        try {
+            $user = $userManager->validateTokenAndFetchUser(UserToken::RESET_PASSWORD, $token);
+        } catch (\Exception $exception) {
+            $this->addFlash('danger', $exception->getMessage());
+
+            return $this->redirectToRoute('app_password_request');
+        }
+
+        $form = $this->createForm(ResetPasswordType::class, null, ['username' => $user->getUsername()]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $password = $form->getData()['password'];
+            $userManager->manageResetPassword($user, $password);
+            $this->addFlash('success', 'The password has been reset with success!');
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('security/reset_password.html.twig', [
             'form' => $form->createView()
         ]);
     }

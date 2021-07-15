@@ -40,8 +40,8 @@ class UserManager
 
     public function activate(User $user): void
     {
-        $this->tokenManager->deleteTokensFromUser($user);
         $user->setIsActivated(true);
+        $this->tokenManager->deleteTokensFromUser($user);
         $this->entityManager->flush();
     }
 
@@ -55,5 +55,17 @@ class UserManager
 
         $token = $this->tokenManager->create(UserToken::RESET_PASSWORD, $user);
         $this->mailer->sendResetPasswordRequest($user, $token);
+    }
+
+    public function manageResetPassword(User $user, string $password): void
+    {
+        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
+        $this->tokenManager->deleteTokensFromUser($user);
+        $this->entityManager->flush();
+    }
+
+    public function validateTokenAndFetchUser(int $type, string $token): User
+    {
+        return $this->tokenManager->validateTokenAndFetchUser($type, $token);
     }
 }
