@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\UserToken;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -47,4 +48,16 @@ class UserTokenRepository extends ServiceEntityRepository
         ;
     }
     */
+    /**
+     * @return UserToken[]
+     */
+    public function findAllExpired()
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.expiredAt > :time')
+            ->setParameter('time', new DateTime('now'))
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

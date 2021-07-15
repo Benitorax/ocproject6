@@ -44,4 +44,16 @@ class UserManager
         $user->setIsActivated(true);
         $this->entityManager->flush();
     }
+
+    public function manageResetPasswordRequest(string $username): void
+    {
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
+
+        if (!$user instanceof User) {
+            return;
+        }
+
+        $token = $this->tokenManager->create(UserToken::RESET_PASSWORD, $user);
+        $this->mailer->sendResetPasswordRequest($user, $token);
+    }
 }

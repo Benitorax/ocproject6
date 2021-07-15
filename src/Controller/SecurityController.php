@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Form\ResetPasswordRequestType;
+use App\Service\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -31,6 +34,36 @@ class SecurityController extends AbstractController
      */
     public function logout(): void
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new \LogicException('This method will be intercepted by the logout key on your firewall.');
+    }
+
+    /**
+     * @Route("/reset-password/request", name="app_password_request")
+     */
+    public function resetPasswordRequest(Request $request, UserManager $userManager): Response
+    {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_homepage');
+        }
+
+        $form = $this->createForm(ResetPasswordRequestType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $username = $form->getData()['username'];
+            $userManager->manageResetPasswordRequest($username);
+            $this->addFlash(
+                'success',
+                sprintf(
+                    'If you\'re registered with %s, an email has been sent to your address.',
+                    $username
+                )
+            );
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('security/reset_password_request.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }

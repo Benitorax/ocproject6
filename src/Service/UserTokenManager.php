@@ -7,6 +7,7 @@ use App\Entity\UserToken;
 use App\Entity\UserPublicToken;
 use App\Repository\UserTokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class UserTokenManager
 {
@@ -39,6 +40,8 @@ class UserTokenManager
      */
     public function create(int $type, User $user): UserPublicToken
     {
+        $this->deleteExpiredTokens();
+
         $expiredAt = new \DateTimeImmutable(sprintf('+%d seconds', $this->resetRequestLifetime));
         $selector = $this->getRandomAlphaNumStr();
         $verifier = $this->getRandomAlphaNumStr();
@@ -147,7 +150,17 @@ class UserTokenManager
     public function deleteTokensFromUser(User $user): void
     {
         $tokens = $user->getTokens();
+        $this->deleteTokens($tokens);
+    }
 
+    private function deleteExpiredTokens(): void
+    {
+        $tokens = $this->repository->findAllExpired();
+        $this->deleteTokens($tokens);
+    }
+
+    private function deleteTokens(iterable $tokens): void
+    {
         foreach ($tokens as $token) {
             $this->entityManager->remove($token);
         }
