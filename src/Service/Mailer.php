@@ -29,11 +29,24 @@ class Mailer
         $this->mailer->send($email);
     }
 
+    public function sendResetPasswordRequest(User $user, UserPublicToken $token): void
+    {
+        $email = $this->createTemplatedEmail('Reset password request', $user)
+            ->htmlTemplate('email/reset_password_request.html.twig')
+            ->context([
+                'token' => $token,
+            ])
+        ;
+
+        $this->mailer->send($email);
+    }
+
     private function createTemplatedEmail(string $subject, User $user): TemplatedEmail
     {
         return (new  TemplatedEmail())
             ->from(new Address('contact@snowtricks.com', 'SnowTricks'))
             ->to(new Address((string) $user->getEmail(), $user->getUsername()))
-            ->subject($subject);
+            ->subject($subject)
+        ;
     }
 }

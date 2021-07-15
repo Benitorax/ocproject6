@@ -2,31 +2,26 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Form\SignupType;
 use App\Entity\UserToken;
 use App\Service\UserManager;
-use App\Service\UserTokenManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class UserController extends AbstractController
 {
     /**
-     * @Route("/sign-up", name="user_create")
+     * @Route("/registration", name="app_user_create")
      */
     public function create(Request $request, UserManager $userManager): Response
     {
-        $user = new User();
-        $form = $this->createForm(SignupType::class, $user);
+        $form = $this->createForm(SignupType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
-            $userManager->saveNewUser($user);
+            $userManager->saveNewUser($form->getData());
             $this->addFlash(
                 'success',
                 'Thanks for registration, a confirmation email has been sent to your address.'
@@ -41,19 +36,18 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/account/activate/{token}", name="user_activate")
+     * @Route("/account/activate/{token}", name="app_user_activate")
      */
     public function activate(
         string $token,
-        UserTokenManager $tokenManager,
         UserManager $userManager
     ): Response {
         try {
-            $user = $tokenManager->validateTokenAndFetchUser(UserToken::SIGNUP, $token);
+            $user = $userManager->validateTokenAndFetchUser(UserToken::SIGNUP, $token);
         } catch (\Exception $exception) {
             $this->addFlash('danger', $exception->getMessage());
 
-            return $this->redirectToRoute('user_create');
+            return $this->redirectToRoute('app_user_create');
         }
 
         $userManager->activate($user);
