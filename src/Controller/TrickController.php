@@ -14,7 +14,33 @@ class TrickController extends AbstractController
     public function index(): Response
     {
         return $this->render('trick/index.html.twig', [
-            'controller_name' => 'TrickController',
+        ]);
+    }
+
+    /**
+     * @Route("/tricks/name", name="app_trick_show")
+     */
+    public function show(): Response
+    {
+        return $this->render('trick/show.html.twig', [
+        ]);
+    }
+
+    /**
+     * @Route("/tricks/name/create", name="app_trick_create")
+     */
+    public function create(): Response
+    {
+        return $this->render('trick/create.html.twig', [
+        ]);
+    }
+
+    /**
+     * @Route("/tricks/name/edit", name="app_trick_edit")
+     */
+    public function edit(): Response
+    {
+        return $this->render('trick/edit.html.twig', [
         ]);
     }
 }
