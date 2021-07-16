@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Uid\Uuid;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use App\Repository\SnowboardTrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -15,10 +16,9 @@ class SnowboardTrick
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true)
      */
-    private int $id;
+    private Uuid $id;
 
     /**
      * @Assert\Length(
@@ -61,25 +61,31 @@ class SnowboardTrick
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="snowboardTrick", orphanRemoval=true)
      */
-    private ArrayCollection $images;
+    private Collection $images;
 
     /**
      * @ORM\OneToMany(targetEntity=Video::class, mappedBy="snowboardTrick", orphanRemoval=true)
      */
-    private ArrayCollection $videos;
+    private Collection $videos;
 
     /**
+     * @Assert\Range(
+     *      min = 1,
+     *      max = 9,
+     *      notInRangeMessage = "A category must be selected",
+     * )
      * @ORM\Column(type="integer")
      */
     private string $category;
 
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->images = new ArrayCollection();
         $this->videos = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
@@ -140,6 +146,10 @@ class SnowboardTrick
     public function setIllustration(Image $illustration): self
     {
         $this->illustration = $illustration;
+
+        if (null === $illustration->getSnowboardTrick()) {
+            $illustration->setSnowboardTrick($this);
+        }
 
         return $this;
     }

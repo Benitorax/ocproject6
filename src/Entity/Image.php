@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ImageRepository;
+use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ImageRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ImageRepository::class)
@@ -12,33 +14,55 @@ class Image
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true)
      */
-    private int $id;
+    private Uuid $id;
 
     /**
+     * @Assert\Choice({
+     *    "image/bmp",
+     *    "image/gif",
+     *    "image/jpeg",
+     *    "image/png"})
      * @ORM\Column(type="string", length=10)
      */
     private string $format;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="blob")
+     * @var resource|string
      */
-    private string $data;
+    private $data;
 
     /**
      * @ORM\ManyToOne(targetEntity=SnowboardTrick::class, inversedBy="images")
      * @ORM\JoinColumn(nullable=false)
      */
-    private SnowboardTrick $snowboardTrick;
+    private ?SnowboardTrick $snowboardTrick = null;
 
-    public function getId(): ?int
+    /**
+     * @var mixed
+     */
+    private $file;
+
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
+    private \DateTimeImmutable $createdAt;
+
+    public function __construct()
+    {
+        $this->id = Uuid::v4();
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
 
-    public function getFormat(): ?string
+    public function getFormat(): string
     {
         return $this->format;
     }
@@ -50,19 +74,25 @@ class Image
         return $this;
     }
 
-    public function getData(): string
+    /**
+     * @return resource|string
+     */
+    public function getData()
     {
-        return $this->data;
+        return (string) stream_get_contents($this->data);
     }
 
-    public function setData(string $data): self
+    /**
+     * @param resource|string $data
+     */
+    public function setData($data): self
     {
         $this->data = $data;
 
         return $this;
     }
 
-    public function getSnowboardTrick(): SnowboardTrick
+    public function getSnowboardTrick(): ?SnowboardTrick
     {
         return $this->snowboardTrick;
     }
@@ -70,6 +100,36 @@ class Image
     public function setSnowboardTrick(SnowboardTrick $snowboardTrick): self
     {
         $this->snowboardTrick = $snowboardTrick;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setFile($file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
