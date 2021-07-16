@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SnowTricks{% endblock %}
+
+{% block body %}
+    <main class="container">
+        <div class="row justify-content-center my-2">
+            <div class="col-12 col-md-9">
+                <div class="position-relative">
+                    <img style="max-height: 500px; width: 100%" src="https://cdn.pixabay.com/photo/2018/02/23/17/56/snowboarding-3176182_1280.jpg">
+                    <h1 class="position-absolute top-50 start-50 translate-middle text-white text-center bg-dark px-5 py-2 rounded h1">Super Trick Name</h1>
+                </div>
+                {{ form_start(form, {'attr': {'class': 'row my-5 my-md-3'}}) }}
+                    <div class="col-12 col-md-9 mx-auto text-center">
+                        <div class="mb-3">
+                            {% for error in form.name.vars.errors %}
+                                <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
+                            {% endfor %}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'id': 'username', 'style': 'text-align: center;', 'placeholder': 'Name'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {% for error in form.description.vars.errors %}
+                                <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
+                            {% endfor %}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'id': 'password', 'style': 'text-align: center;', 'placeholder': 'Description'}}) }}    
+                        </div>
+                        {{ form_widget(form.category, {'attr': {'class': 'form-select', 'id': 'password', 'style': 'text-align: center;'}}) }}
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button type="submit" class="btn btn-primary d-block mx-auto">Save</button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </main>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/trick.css') }}"></link>
+{% endblock %}

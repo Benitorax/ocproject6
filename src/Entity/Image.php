@@ -27,6 +27,12 @@ class Image
      */
     private string $data;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=SnowboardTrick::class, inversedBy="images")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private SnowboardTrick $snowboardTrick;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +58,18 @@ class Image
     public function setData(string $data): self
     {
         $this->data = $data;
+
+        return $this;
+    }
+
+    public function getSnowboardTrick(): SnowboardTrick
+    {
+        return $this->snowboardTrick;
+    }
+
+    public function setSnowboardTrick(SnowboardTrick $snowboardTrick): self
+    {
+        $this->snowboardTrick = $snowboardTrick;
 
         return $this;
     }

@@ -27,6 +27,12 @@ class Video
      */
     private string $source;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=SnowboardTrick::class, inversedBy="videos")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private SnowboardTrick $snowboardTrick;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +58,18 @@ class Video
     public function setSource(string $source): self
     {
         $this->source = $source;
+
+        return $this;
+    }
+
+    public function getSnowboardTrick(): SnowboardTrick
+    {
+        return $this->snowboardTrick;
+    }
+
+    public function setSnowboardTrick(SnowboardTrick $snowboardTrick): self
+    {
+        $this->snowboardTrick = $snowboardTrick;
 
         return $this;
     }
