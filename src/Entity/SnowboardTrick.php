@@ -59,7 +59,12 @@ class SnowboardTrick
     private $illustration;
 
     /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="snowboardTrick", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\OneToMany(
+     *     targetEntity=Image::class,
+     *     mappedBy="snowboardTrick",
+     *     orphanRemoval=true,
+     *     cascade={"persist", "remove"}
+     * )
      */
     private Collection $images;
 
@@ -145,10 +150,10 @@ class SnowboardTrick
 
     public function setIllustration(?Image $illustration): self
     {
-        if(!$illustration instanceof Image) {
+        if (!$illustration instanceof Image) {
             return $this;
         }
-        
+
         $this->illustration = $illustration;
 
         if (null === $illustration->getSnowboardTrick()) {

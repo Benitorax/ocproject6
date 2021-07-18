@@ -25,6 +25,9 @@ class AppExtension extends AbstractExtension
     //     ];
     // }
 
+    /**
+     * Convert an Image instance to data url.
+     */
     public function imageToDataUrl(Image $image): string
     {
         $format = preg_replace('/image\//', '', $image->getFormat());

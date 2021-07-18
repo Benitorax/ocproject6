@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SnowboardTrickController extends AbstractController
 {
     /**
+     * Show the list of tricks.
+     *
      * @Route("/", name="app_homepage")
      */
     public function index(): Response
@@ -21,6 +23,8 @@ class SnowboardTrickController extends AbstractController
     }
 
     /**
+     * Show a detailed trick.
+     *
      * @Route("/tricks/name", name="app_snowboard_trick_show")
      */
     public function show(): Response
@@ -30,6 +34,8 @@ class SnowboardTrickController extends AbstractController
     }
 
     /**
+     * Create a trick.
+     *
      * @Route("/tricks/create", name="app_snowboard_trick_create")
      */
     public function create(Request $request, SnowboardTrickManager $trickManager): Response
@@ -50,6 +56,8 @@ class SnowboardTrickController extends AbstractController
     }
 
     /**
+     * Edit a trick.
+     *
      * @Route("/tricks/name/edit", name="app_snowboard_trick_edit")
      */
     public function edit(): Response

@@ -13,6 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class UserController extends AbstractController
 {
     /**
+     * Create a user.
+     *
      * @Route("/registration", name="app_user_create")
      */
     public function create(Request $request, UserManager $userManager): Response
@@ -36,6 +38,8 @@ class UserController extends AbstractController
     }
 
     /**
+     * Activate a user.
+     *
      * @Route("/account/activate/{token}", name="app_user_activate")
      */
     public function activate(

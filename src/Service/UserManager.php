@@ -27,6 +27,9 @@ class UserManager
         $this->mailer = $mailer;
     }
 
+    /**
+     * Save a new user.
+     */
     public function saveNewUser(User $user): User
     {
         $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPassword()));
@@ -38,6 +41,9 @@ class UserManager
         return $user;
     }
 
+    /**
+     * Activate a user.
+     */
     public function activate(User $user): void
     {
         $user->setIsActivated(true);
@@ -45,6 +51,9 @@ class UserManager
         $this->entityManager->flush();
     }
 
+    /**
+     * Manage a reset password request.
+     */
     public function manageResetPasswordRequest(string $username): void
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
@@ -57,6 +66,9 @@ class UserManager
         $this->mailer->sendResetPasswordRequest($user, $token);
     }
 
+    /**
+     * Manage reset password.
+     */
     public function manageResetPassword(User $user, string $password): void
     {
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
@@ -64,6 +76,9 @@ class UserManager
         $this->entityManager->flush();
     }
 
+    /**
+     * If token is valid then fetch user.
+     */
     public function validateTokenAndFetchUser(int $type, string $token): User
     {
         return $this->tokenManager->validateTokenAndFetchUser($type, $token);

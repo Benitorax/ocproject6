@@ -17,6 +17,9 @@ class Mailer
         $this->mailer = $mailer;
     }
 
+    /**
+     * Send email with token when sign up.
+     */
     public function sendSignupEmail(User $user, UserPublicToken $token): void
     {
         $email = $this->createTemplatedEmail('Thanks for signing up!', $user)
@@ -29,6 +32,9 @@ class Mailer
         $this->mailer->send($email);
     }
 
+    /**
+     * Send email with token when request to reset a password.
+     */
     public function sendResetPasswordRequest(User $user, UserPublicToken $token): void
     {
         $email = $this->createTemplatedEmail('Reset password request', $user)
@@ -41,6 +47,9 @@ class Mailer
         $this->mailer->send($email);
     }
 
+    /**
+     * Create a TemplatedEmail.
+     */
     private function createTemplatedEmail(string $subject, User $user): TemplatedEmail
     {
         return (new  TemplatedEmail())

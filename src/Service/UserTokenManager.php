@@ -52,6 +52,9 @@ class UserTokenManager
         return new UserPublicToken($selector . $verifier, $expiredAt);
     }
 
+    /**
+     * If token is valid, then fetch user.
+     */
     public function validateTokenAndFetchUser(int $type, string $token): User
     {
         if (40 !== \strlen($token)) {
@@ -87,6 +90,9 @@ class UserTokenManager
         return $user;
     }
 
+    /**
+     * Create Exception.
+     */
     private function createException(int $type, string $message): \Exception
     {
         if (UserToken::SIGNUP === $type) {
@@ -140,6 +146,9 @@ class UserTokenManager
         return $this->repository->findOneBy(['type' => $type, 'selector' => $selector]);
     }
 
+    /**
+     * Ensure only one token of the user is in database.
+     */
     private function ensureOneTokenInDatabase(UserToken $token): void
     {
         $this->deleteTokensFromUser($token->getUser());
@@ -147,18 +156,27 @@ class UserTokenManager
         $this->entityManager->flush();
     }
 
+    /**
+     * Delete every tokens of the user.
+     */
     public function deleteTokensFromUser(User $user): void
     {
         $tokens = $user->getTokens();
         $this->deleteTokens($tokens);
     }
 
+    /**
+     * Delete expired tokens.
+     */
     private function deleteExpiredTokens(): void
     {
         $tokens = $this->repository->findAllExpired();
         $this->deleteTokens($tokens);
     }
 
+    /**
+     * Delete tokens.
+     */
     private function deleteTokens(iterable $tokens): void
     {
         foreach ($tokens as $token) {

@@ -42,6 +42,7 @@ class Image
     private ?SnowboardTrick $snowboardTrick = null;
 
     /**
+     * Used only for ImageType.
      * @var mixed
      */
     private $file;

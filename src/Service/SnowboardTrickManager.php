@@ -19,6 +19,9 @@ class SnowboardTrickManager
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * Save a new trick.
+     */
     public function saveNewTrick(SnowboardTrick $trick): void
     {
         $datetime = new \DateTimeImmutable('now');
