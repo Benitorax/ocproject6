@@ -59,7 +59,7 @@ class SnowboardTrick
     private $illustration;
 
     /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="snowboardTrick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="snowboardTrick", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private Collection $images;
 
@@ -143,8 +143,12 @@ class SnowboardTrick
         return $this->illustration;
     }
 
-    public function setIllustration(Image $illustration): self
+    public function setIllustration(?Image $illustration): self
     {
+        if(!$illustration instanceof Image) {
+            return $this;
+        }
+        
         $this->illustration = $illustration;
 
         if (null === $illustration->getSnowboardTrick()) {
@@ -167,6 +171,18 @@ class SnowboardTrick
         if (!$this->images->contains($image)) {
             $this->images[] = $image;
             $image->setSnowboardTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // if ($image->getSnowboardTrick() === $this) {
+            //     $image->setSnowboardTrick(null);
+            // }
         }
 
         return $this;

@@ -1,0 +1,19 @@
+{% block collection_entry_widget %}
+    <div id="{{ form.vars.id }}" class="row mt-2">
+        {# <label for="{{ form.vars.id }}__file" class="required">File</label> #}
+        <input class="form-control" type="file" id="{{ form.vars.id }}_file" name="{{ form.vars.full_name }}[file]" required="required"/>
+    </div>
+    <div class="row justify-content-center my-2">
+        <div class="col-auto js-image d-none mt-2" style="width: 12rem;">
+            <img class="img-fluid rounded" src="">
+        </div>
+        <div class="col-auto ml-auto mt-2 js-button"></div>
+    </div>
+{% endblock %}
+
+{% block collection_entry_label %}
+    <label class="form-label">Images</label>
+{% endblock %}
+
+{% block collection_label %}
+{% endblock %}

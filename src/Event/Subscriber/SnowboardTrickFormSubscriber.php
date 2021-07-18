@@ -17,6 +17,9 @@ class SnowboardTrickFormSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * Set trick to images and set illustration if null.
+     */
     public function onPostSubmit(FormEvent $event): void
     {
         $trick = $event->getData();
@@ -25,15 +28,40 @@ class SnowboardTrickFormSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $illustration = $trick->getIllustration();
+        $images = $trick->getImages();
 
-        if (!$illustration instanceof Image) {
-            return;
+        foreach ($images as $image) {
+            $this->hydrateImage($image, $trick);
         }
 
-        $illustration->setSnowboardTrick($trick);
-        $file = $illustration->getFile();
-        $illustration->setData($file->getContent());
-        $illustration->setData($file->getMimeType());
+        $this->hydrateIllustration($trick);
+    }
+
+    /**
+     * Set format and data properties in Image object.
+     */
+    private function hydrateImage(Image $image, SnowboardTrick $trick): Image
+    {
+        $image->setSnowboardTrick($trick);
+        $file = $image->getFile();
+        $image->setData($file->getContent());
+        $image->setFormat($file->getMimeType());
+
+        return $image;
+    }
+
+    /**
+     * If illustration is null, then set the first element of images.
+     */
+    private function hydrateIllustration(SnowboardTrick $trick): SnowboardTrick
+    {
+        $illustration = $trick->getIllustration();
+
+        if ($illustration instanceof Image) {
+            $this->hydrateImage($illustration, $trick);
+            return $trick;
+        }
+
+        return $trick->setIllustration($trick->getImages()[0]);
     }
 }

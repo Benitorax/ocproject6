@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Form\ImageType;
 use App\Entity\SnowboardTrick;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class SnowboardTrickType extends AbstractType
 {
@@ -34,6 +36,13 @@ class SnowboardTrickType extends AbstractType
             ])
             ->add('illustration', ImageType::class, [
                 'required' => false
+            ])
+            ->add('images', CollectionType::class, [
+                'entry_type' => ImageType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
             ])
             ->addEventSubscriber(new SnowboardTrickFormSubscriber())
         ;

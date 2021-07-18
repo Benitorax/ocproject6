@@ -39,6 +39,16 @@
                             {% endfor %}
                             {{ form_widget(form.illustration.file, {'attr': {'class': 'form-control', 'id': 'illustration-file'}}) }}    
                         </div>
+                        <hr>
+                        <div class="mb-3">
+                            {% form_theme form.images with ['form/_collection_widget.html.twig'] %}
+                            {% for error in form.images.vars.errors %}
+                                <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
+                            {% endfor %}
+                            {{ form_label(form.images.vars.prototype, null, {'attr': {'class': ''}}) }}    
+                            <ul id="snowboard_trick_images" class="snowboard_trick_images list-group mt-3" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"></ul>
+                            <button type="button" class="btn btn-secondary add_item_link my-2" data-collection-holder-class="snowboard_trick_images">Add image</button>
+                        </div>
                     </div>
                     <div class="col-12 mt-3">
                         <button type="submit" class="btn btn-primary d-block mx-auto">Save</button>
