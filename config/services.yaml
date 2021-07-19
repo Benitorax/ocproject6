@@ -23,3 +23,19 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\VideoUrlConverter\YoutubeConverter:
+        tags:
+            - { name: 'app.video_url_converter', priority: 500 }
+
+    App\Service\VideoUrlConverter\DailymotionConverter:
+        tags:
+            - { name: 'app.video_url_converter', priority: 300 }
+
+    App\Service\VideoUrlConverter\VimeoConverter:
+        tags:
+            - { name: 'app.video_url_converter', priority: 100 }
+
+    App\Service\VideoUrlConverter\VideoUrlConverter:
+        arguments:
+            $urlConverters: !tagged_iterator app.video_url_converter

@@ -27,14 +27,17 @@
     // ==========================================================================================================
 
     // Get the ul that holds the collection of images
-    let imagesCollectionHolder = document.getElementById('snowboard_trick_images');
-    // count the current form inputs we have use that as the new
-    // index when inserting a new item
-    imagesCollectionHolder.dataset.index = imagesCollectionHolder.childElementCount;
+    let collectionHolders = document.querySelectorAll('.js-collection-holder');
 
-    // add a delete link to all of the existing form li elements
-    imagesCollectionHolder.querySelectorAll('li').forEach(function(element) {
-        addDeleteButtonToForm(element);
+    collectionHolders.forEach(function(collectionHolder) {
+        // count the current form inputs we have use that as the new
+        // index when inserting a new item
+        collectionHolder.dataset.index = collectionHolder.childElementCount;
+
+        // add a delete link to all of the existing form li elements
+        collectionHolder.querySelectorAll('li').forEach(function(element) {
+            addDeleteButtonToForm(element);
+        });
     });
 
     document.body.addEventListener('click', function(e) {
@@ -49,7 +52,7 @@
         // Get the ul that holds the collection of tags
         let collectionHolder = document.querySelector('.' + collectionHolderClass);
 
-        // Get the data-prototype explained earlier
+        // Get the data-prototype
         let prototype = collectionHolder.dataset.prototype;
 
         // get the new index
@@ -72,13 +75,16 @@
         // Add the new form at the end of the list
         collectionHolder.append(liElement);
 
-        // add listener to input of the new form
-        addListenerToFileInput(liElement)
+        // add listener to file input of the new form for images
+        if (collectionHolderClass === 'snowboard_trick_images') {
+            addListenerToFileInput(liElement);
+        }
 
         // add a delete link to the new form
         addDeleteButtonToForm(liElement);
     }
 
+    // add a delete button to form
     function addDeleteButtonToForm(liElement) {
         let buttonElement = document.createElement("button");
         buttonElement.type = 'button';
@@ -92,6 +98,7 @@
         });
     }
 
+    // display image of file input
     function addListenerToFileInput(liElement) {
         let inputElement = liElement.querySelector('input')
 

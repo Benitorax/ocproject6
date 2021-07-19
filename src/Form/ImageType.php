@@ -18,7 +18,7 @@ class ImageType extends AbstractType
             ->add('file', FileType::class, [
                 'constraints' => [
                     new ImageConstraint([
-                        'maxSize' => '1M',
+                        'maxSize' => '500K',
                         'mimeTypes' => [
                             "image/bmp",
                             "image/gif",

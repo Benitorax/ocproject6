@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\VideoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\VideoRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @Assert\Callback({"App\Validator\VideoValidator", "validate"})
  * @ORM\Entity(repositoryClass=VideoRepository::class)
  */
 class Video
@@ -32,6 +34,11 @@ class Video
      * @ORM\JoinColumn(nullable=false)
      */
     private SnowboardTrick $snowboardTrick;
+
+    /**
+     * Used only for VideoType.
+     */
+    private string $tagOrUrl;
 
     public function getId(): ?int
     {
@@ -70,6 +77,18 @@ class Video
     public function setSnowboardTrick(SnowboardTrick $snowboardTrick): self
     {
         $this->snowboardTrick = $snowboardTrick;
+
+        return $this;
+    }
+
+    public function getTagOrUrl(): ?string
+    {
+        return $this->tagOrUrl;
+    }
+
+    public function setTagOrUrl(string $tagOrUrl): self
+    {
+        $this->tagOrUrl = $tagOrUrl;
 
         return $this;
     }

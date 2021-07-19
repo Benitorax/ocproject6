@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Form\ImageType;
+use App\Form\VideoType;
 use App\Entity\SnowboardTrick;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,6 +16,13 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class SnowboardTrickType extends AbstractType
 {
+    private SnowboardTrickFormSubscriber $subscriber;
+
+    public function __construct(SnowboardTrickFormSubscriber $subscriber)
+    {
+        $this->subscriber = $subscriber;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -38,13 +46,22 @@ class SnowboardTrickType extends AbstractType
                 'required' => false
             ])
             ->add('images', CollectionType::class, [
+                'label' => 'Images',
                 'entry_type' => ImageType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
-                'by_reference' => false,
+                'by_reference' => false
             ])
-            ->addEventSubscriber(new SnowboardTrickFormSubscriber())
+            ->add('videos', CollectionType::class, [
+                'label' => 'Videos',
+                'entry_type' => VideoType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false
+            ])
+            ->addEventSubscriber($this->subscriber)
         ;
     }
 

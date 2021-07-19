@@ -1,7 +1,11 @@
 {% block collection_entry_widget %}
     <div id="{{ form.vars.id }}" class="row mt-2">
         {# <label for="{{ form.vars.id }}__file" class="required">File</label> #}
-        <input class="form-control" type="file" id="{{ form.vars.id }}_file" name="{{ form.vars.full_name }}[file]" required="required"/>
+        {% if form.parent.vars.name is same as('images') %}
+            <input class="form-control" type="file" id="{{ form.vars.id }}_file" name="{{ form.vars.full_name }}[file]" required="required"/>
+        {% elseif form.parent.vars.name is same as('videos') %}
+            <textarea class="form-control" id="{{ form.vars.id }}_file" name="{{ form.vars.full_name }}[tagOrUrl]" placeholder="Copy the video's url or the embed code" required="required"></textarea>
+        {% endif %}
     </div>
     <div class="row justify-content-center my-2">
         <div class="col-auto js-image d-none mt-2" style="width: 12rem;">
@@ -12,8 +16,11 @@
 {% endblock %}
 
 {% block collection_entry_label %}
-    <label class="form-label">Images</label>
+    <label class="form-label">{{ form.parent.vars.label }}</label>
 {% endblock %}
 
 {% block collection_label %}
+{% endblock %}
+
+{% block collection_widget %}
 {% endblock %}

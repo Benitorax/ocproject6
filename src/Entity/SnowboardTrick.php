@@ -69,7 +69,12 @@ class SnowboardTrick
     private Collection $images;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="snowboardTrick", orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity=Video::class,
+     *     mappedBy="snowboardTrick",
+     *     orphanRemoval=true,
+     *     cascade={"persist", "remove"}
+     * )
      */
     private Collection $videos;
 
@@ -206,6 +211,18 @@ class SnowboardTrick
         if (!$this->videos->contains($video)) {
             $this->videos[] = $video;
             $video->setSnowboardTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->contains($video)) {
+            $this->videos->removeElement($video);
+            // if ($video->getSnowboardTrick() === $this) {
+            //     $video->setSnowboardTrick(null);
+            // }
         }
 
         return $this;
