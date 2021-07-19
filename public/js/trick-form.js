@@ -34,9 +34,11 @@
         // index when inserting a new item
         collectionHolder.dataset.index = collectionHolder.childElementCount;
 
-        // add a delete link to all of the existing form li elements
-        collectionHolder.querySelectorAll('li').forEach(function(element) {
+        // add a delete link to all of the existing form div elements
+        collectionHolder.querySelectorAll('div.card').forEach(function(element) {
+            // add delete button and listener to form
             addDeleteButtonToForm(element);
+            addListenerToFileInput(element);
         });
     });
 
@@ -67,54 +69,61 @@
         // increase the index with one for the next item
         collectionHolder.dataset.index = parseInt(index) + parseInt(1);
 
-        // Display the form in the page in an li, before the "Add" link li
-        let liElement = document.createElement("li");
-        liElement.classList.add('list-group-item');
-        liElement.innerHTML = newForm;
+        // Display the form in the page in an div, before the "Add" link
+        let divElement = document.createElement("div");
+        divElement.classList.add('card', 'mb-2', 'mx-auto');
+        divElement.style.width = "19.6rem";
+        divElement.innerHTML = newForm;
 
         // Add the new form at the end of the list
-        collectionHolder.append(liElement);
+        collectionHolder.append(divElement);
 
         // add listener to file input of the new form for images
         if (collectionHolderClass === 'snowboard_trick_images') {
-            addListenerToFileInput(liElement);
+            addListenerToFileInput(divElement);
         }
 
         // add a delete link to the new form
-        addDeleteButtonToForm(liElement);
+        addDeleteButtonToForm(divElement);
     }
 
     // add a delete button to form
-    function addDeleteButtonToForm(liElement) {
+    function addDeleteButtonToForm(divElement) {
         let buttonElement = document.createElement("button");
         buttonElement.type = 'button';
-        buttonElement.classList.add("btn", "btn-danger");
+        buttonElement.classList.add("btn", "btn-danger", 'btn-sm');
         buttonElement.innerText = 'Delete';
-        liElement.querySelector('.js-button').append(buttonElement);
+        divElement.querySelector('.js-button').append(buttonElement);
 
         buttonElement.addEventListener('click', function(e) {
-            // remove the li for the form
-            liElement.remove();
+            // remove the form div
+            divElement.remove();
         });
     }
 
-    // display image of file input
-    function addListenerToFileInput(liElement) {
-        let inputElement = liElement.querySelector('input')
+    // display image of file input and remove error message
+    function addListenerToFileInput(divElement) {
+        let inputElement = divElement.querySelector('input');
+        if (inputElement === null) return;
 
         inputElement.onchange = function(e) {
+            // remove error message
+            let errorElement = divElement.querySelector('.js-error');
+            if (errorElement !== null) errorElement.remove();
+
+            // display image from file input
             let image = inputElement.files[0];
 
-            if (!image.type.includes('image/')) {
-                return;
+            if (image.type.includes('image/')) {
+                reader.onload = function(e) {
+                    let jsElement = divElement.querySelector('.js-image');
+                    if (jsElement !== null) {
+                        jsElement.firstElementChild.src = e.target.result;
+                        jsElement.classList.remove('d-none');
+                    }
+                };
+                reader.readAsDataURL(image);
             }
-
-            reader.onload = function(e) {
-                let jsElement = liElement.querySelector('.js-image');
-                jsElement.firstElementChild.src = e.target.result;
-                jsElement.classList.remove('d-none');
-            };
-            reader.readAsDataURL(image);
         };
     }
 }();

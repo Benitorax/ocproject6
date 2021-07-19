@@ -9,5 +9,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class VideoUrl extends Constraint
 {
-    public string $message = 'Valid video url are from Youtube, Dailymotion and Vimeo.';
+    public string $message = 'Valid url: Youtube, Dailymotion and Vimeo.';
 }

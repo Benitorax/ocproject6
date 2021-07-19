@@ -76,8 +76,10 @@ class SnowboardTrickFormSubscriber implements EventSubscriberInterface
     private function hydrateVideos(iterable $videos): void
     {
         foreach ($videos as $video) {
-            [$source, $url] = $this->converter->convert((string) $video->getTagOrUrl());
-            $video->setSource($source)->setUrl($url);
+            $data = $this->converter->convert((string) $video->getTagOrUrl());
+            if (null !== $data) {
+                $video->setSource($data['source'])->setUrl($data['url']);
+            }
         }
     }
 }

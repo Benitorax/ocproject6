@@ -52,6 +52,9 @@ abstract class AbstractConverter
             }
         }
 
-        return [static::SOURCE, $embedUrl];
+        return [
+            'source' => static::SOURCE,
+            'url' => $embedUrl
+        ];
     }
 }

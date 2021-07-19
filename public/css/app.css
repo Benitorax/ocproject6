@@ -43,3 +43,8 @@ body {
 #title-banner {
   background-color: rgba(0, 0, 0, 0.6);
 }
+
+.label-collection {
+  width: 100%;
+  background-color: rgb(223, 222, 222);
+}

@@ -4,16 +4,36 @@
 
 {% block body %}
     <main class="container">
+        {% if app.user is null %}
+            <div class="row justify-content-center my-5">
+                <div class="col-12 col-md-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="mb-5">You must be authenticated to submit a new trick.</h4>
+                            <p><a href="{{ path('app_login') }}">Click here</a> to log in.</p>
+                            <p>If you don't have an account, <a href="{{ path('app_user_create') }}">click here</a> to sign up.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
         <div class="row justify-content-center my-2">
-            <div class="col-12 col-md-9">
+            <div class="col-12 col-md-9 gx-1 gx-0 border">
                 <div class="position-relative">
                     <img id="image-banner" style="max-height: 500px; width: 100%" src="{{ asset('images/default.png') }}">
                     <h1 id="title-banner" class="position-absolute top-50 start-50 translate-middle text-white text-center px-5 py-2 rounded h1">
                         {% if form.name.vars.data %}{{ form.name.vars.data }}{% else %}Trick Name{% endif %}
                     </h1>
                 </div>
-                {{ form_start(form, {'attr': {'class': 'row my-5 my-md-3'}}) }}
-                    <div class="col-12 col-md-9 mx-auto text-center">
+                {{ form_start(form, {'attr': {'class': 'row mb-3 text-center'}}) }}
+                    <div class="col-12 mx-auto mb-5">
+                        {% for error in form.illustration.file.vars.errors %}
+                            <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
+                        {% endfor %}
+                        <label class="form-label label-collection py-1 mb-0">Illustration</label>
+                        {{ form_widget(form.illustration.file, {'attr': {'class': 'form-control', 'id': 'illustration-file', 'accept': 'image/bmp,image/gif,image/jpeg,image/png'}}) }}    
+                    </div>
+                    <div class="col-12 col-md-9 mx-auto">
                         <div class="mb-3">
                             {% for error in form.name.vars.errors %}
                                 <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
@@ -24,65 +44,40 @@
                             {% for error in form.description.vars.errors %}
                                 <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
                             {% endfor %}
-                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'id': 'description', 'style': 'text-align: center;', 'placeholder': 'Description'}}) }}    
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'id': 'description',  'rows': '4', 'placeholder': 'Description'}}) }}    
                         </div>
-                        <div>
+                        <div class="mb-5">
                             {% for error in form.category.vars.errors %}
                                 <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
                             {% endfor %}
                             {{ form_widget(form.category, {'attr': {'class': 'form-select', 'id': 'password', 'style': 'text-align: center;'}}) }}
                         </div>
-                        <hr>
-                        <div class="mb-3">
-                            {% for error in form.illustration.file.vars.errors %}
-                                <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
-                            {% endfor %}
-                            {{ form_widget(form.illustration.file, {'attr': {'class': 'form-control', 'id': 'illustration-file'}}) }}    
-                        </div>
-                        <hr>
+                    </div>
+                    <div class="col-12 mx-auto">
                         <div class="mb-3">
                             {% form_theme form.images with ['form/_collection_widget.html.twig'] %}
-                            {{ form_label(form.images.vars.prototype, null, {'attr': {'class': ''}}) }}    
-                            <ul id="{{ form.images.vars.id }}" class="{{ form.images.vars.id }} js-collection-holder list-group mt-3" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
-                                {% for image in form.images %}
-                                    {% for file in image %}
-                                        <li class="list-group-item">
-                                            {% for error in file.vars.errors %}
-                                                <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
-                                            {% endfor %}
-                                            {{ form_widget(image) }}
-                                        </li>
-                                    {% endfor %}
-                                {% endfor %}
-                            </ul>
-                            <button type="button" class="btn btn-secondary add_item_link my-2" data-collection-holder-class="{{ form.images.vars.id }}">Add image</button>
+                            <label class="form-label label-collection py-2 mb-3">Images</label> 
+                            <div id="{{ form.images.vars.id }}" class="{{ form.images.vars.id }} js-collection-holder d-flex justify-content-between flex-wrap" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+                                {{ form_widget(form.images) }}
+                            </div>
+                            <button type="button" class="btn btn-link add_item_link my-2" data-collection-holder-class="{{ form.images.vars.id }}">+ Add image</button>
                         </div>
-                        <hr>
                         <div class="mb-3">
                             {% form_theme form.videos with ['form/_collection_widget.html.twig'] %}
-                            {{ form_label(form.videos.vars.prototype, null, {'attr': {'class': ''}}) }}    
-                            <ul id="{{ form.videos.vars.id }}" class="{{ form.videos.vars.id }} js-collection-holder list-group mt-3" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
-                                {% for video in form.videos %}
-                                    {% for file in video %}
-                                        <li class="list-group-item">
-                                            {% for error in file.vars.errors %}
-                                                <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
-                                            {% endfor %}
-                                            {{ form_widget(video) }}
-                                        </li>
-                                    {% endfor %}
-                                {% endfor %}
-                            </ul>
-                            <button type="button" class="btn btn-secondary add_item_link my-2" data-collection-holder-class="{{ form.videos.vars.id }}">Add video</button>
+                            <label class="form-label label-collection py-2 mb-3">Video</label> 
+                            <div id="{{ form.videos.vars.id }}" class="{{ form.videos.vars.id }} js-collection-holder d-flex justify-content-between flex-wrap" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
+                                {{ form_widget(form.videos) }}
+                            </div>
+                            <button type="button" class="btn btn-link add_item_link my-2" data-collection-holder-class="{{ form.videos.vars.id }}">+ Add video</button>
                         </div>
-                        <hr>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <button type="submit" class="btn btn-success d-block mx-auto">Save</button>
+                        <div class="mt-5 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success px-4 me-3">Create</button>
+                        </div>
                     </div>
                 {{ form_end(form) }}
             </div>
         </div>
+        {% endif %}
     </main>
 {% endblock %}
 {% block javascripts %}

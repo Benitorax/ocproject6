@@ -8,9 +8,14 @@ use Doctrine\Common\Collections\Collection;
 use App\Repository\SnowboardTrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=SnowboardTrickRepository::class)
+ * @UniqueEntity(
+ *     "name",
+ *     message="This trick {{ value }} already exists."
+ * )
  */
 class SnowboardTrick
 {
@@ -34,11 +39,11 @@ class SnowboardTrick
     /**
      * @Assert\Length(
      *      min = 10,
-     *      max = 255,
+     *      max = 500,
      *      minMessage = "The name must be at least {{ limit }} characters long.",
      *      maxMessage = "The name cannot be longer than {{ limit }} characters."
      * )
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private string $description;
 
@@ -84,6 +89,7 @@ class SnowboardTrick
      *      max = 9,
      *      notInRangeMessage = "A category must be selected",
      * )
+     * @Assert\NotBlank(message="A category must be selected")
      * @ORM\Column(type="integer")
      */
     private string $category;

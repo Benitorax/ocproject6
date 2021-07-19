@@ -25,7 +25,7 @@ class SnowboardTrickController extends AbstractController
     /**
      * Show a detailed trick.
      *
-     * @Route("/tricks/name", name="app_snowboard_trick_show")
+     * @Route("/trick/name", name="app_snowboard_trick_show")
      */
     public function show(): Response
     {
@@ -36,18 +36,23 @@ class SnowboardTrickController extends AbstractController
     /**
      * Create a trick.
      *
-     * @Route("/tricks/create", name="app_snowboard_trick_create")
+     * @Route("/trick/new", name="app_snowboard_trick_create")
      */
     public function create(Request $request, SnowboardTrickManager $trickManager): Response
     {
         $form = $this->createForm(SnowboardTrickType::class);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $trickManager->saveNewTrick($form->getData());
-            $this->addFlash('success', 'A trick has been created with success!');
+        if ($this->getUser()) {
+            $form->handleRequest($request);
 
-            return $this->redirectToRoute('app_snowboard_trick_create');
+            if ($form->isSubmitted() && $form->isValid()) {
+                $trickManager->saveNewTrick($form->getData());
+                $this->addFlash('success', 'A trick has been created with success!');
+
+                return $this->redirectToRoute('app_homepage');
+            } elseif ($form->isSubmitted()) {
+                $this->addFlash('danger', 'Please, correct any field errors.');
+            }
         }
 
         return $this->render('snowboard-trick/create.html.twig', [
@@ -58,7 +63,7 @@ class SnowboardTrickController extends AbstractController
     /**
      * Edit a trick.
      *
-     * @Route("/tricks/name/edit", name="app_snowboard_trick_edit")
+     * @Route("/trick/name/edit", name="app_snowboard_trick_edit")
      */
     public function edit(): Response
     {

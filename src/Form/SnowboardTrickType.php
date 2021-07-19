@@ -30,7 +30,7 @@ class SnowboardTrickType extends AbstractType
             ->add('description', TextareaType::class)
             ->add('category', ChoiceType::class, [
                 'choices'  => [
-                    'Select a category' => 0,
+                    'Select a category' => '',
                     'Straight airs' => 1,
                     'Grabs' => 2,
                     'Spins' => 3,
@@ -40,6 +40,12 @@ class SnowboardTrickType extends AbstractType
                     'Stalls' => 7,
                     'Tweaks and variations' => 8,
                     'Miscellaneous tricks and identifiers' => 9,
+                ],
+                'choice_attr' => [
+                    'Select a category' => [
+                        'readonly' => true,
+                        'hidden' => true
+                    ],
                 ],
             ])
             ->add('illustration', ImageType::class, [

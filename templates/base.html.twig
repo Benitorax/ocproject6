@@ -23,7 +23,7 @@
             <nav class="navbar navbar-expand navbar-dark bg-dark sticky-top">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="{{ path('app_homepage') }}">SnowTricks</a>
-                    <div class="ml-auto">
+                    <div class="">
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link{% if app.request.attributes.get('_route') is same as('app_homepage') %} active" aria-current="page{% endif %}" href="{{ path('app_homepage') }}">Home</a>
@@ -90,7 +90,7 @@
         </header>
         {% for label, messages in app.flashes %}
             {% for message in messages %}
-                <div class="alert alert-{{ label }} text-center" role="alert">
+                <div class="alert alert-{{ label }} text-center mb-0" role="alert">
                     {{ message }}
                 </div>
             {% endfor %}
@@ -98,7 +98,7 @@
         {% block body %}{% endblock %}
         <footer class="w-100 mt-auto navbar navbar-light bg-light">
             <div class="container-fluid">
-                <span class="navbar-text ml-3">
+                <span class="navbar-text">
                     Copyright @ 2021
                 </span>
             </div>

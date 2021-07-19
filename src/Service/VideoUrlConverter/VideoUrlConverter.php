@@ -31,13 +31,13 @@ class VideoUrlConverter
     /**
      * Convert url to array: [$source, $embedUrl].
      */
-    public function convert(string $tagOrUrl): array
+    public function convert(string $tagOrUrl): ?array
     {
         if ($converter = $this->getConverter($tagOrUrl)) {
             return $converter->process($tagOrUrl);
         }
 
-        return [];
+        return null;
     }
 
     /**
