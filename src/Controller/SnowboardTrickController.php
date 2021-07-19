@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\SnowboardTrick;
 use App\Form\SnowboardTrickType;
 use App\Service\SnowboardTrickManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,17 +20,6 @@ class SnowboardTrickController extends AbstractController
     public function index(): Response
     {
         return $this->render('snowboard-trick/index.html.twig', [
-        ]);
-    }
-
-    /**
-     * Show a detailed trick.
-     *
-     * @Route("/trick/name", name="app_snowboard_trick_show")
-     */
-    public function show(): Response
-    {
-        return $this->render('snowboard-trick/show.html.twig', [
         ]);
     }
 
@@ -57,6 +47,18 @@ class SnowboardTrickController extends AbstractController
 
         return $this->render('snowboard-trick/create.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Show a detailed trick.
+     *
+     * @Route("/trick/{name}", name="app_snowboard_trick_show")
+     */
+    public function show(SnowboardTrick $trick): Response
+    {
+        return $this->render('snowboard-trick/show.html.twig', [
+            'trick' => $trick
         ]);
     }
 

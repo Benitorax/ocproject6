@@ -4,6 +4,7 @@ namespace App\Event\Subscriber;
 
 use App\Entity\Image;
 use App\Entity\Video;
+use App\Service\Slugifier;
 use App\Entity\SnowboardTrick;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -43,6 +44,7 @@ class SnowboardTrickFormSubscriber implements EventSubscriberInterface
 
         $this->hydrateIllustration($trick);
         $this->hydrateVideos($trick->getVideos());
+        $trick->setSlug(Slugifier::slugify((string) $trick->getName()));
     }
 
     /**
@@ -72,6 +74,7 @@ class SnowboardTrickFormSubscriber implements EventSubscriberInterface
 
     /**
      * Set source and embed url in every Video object.
+     * @param Video[] $videos
      */
     private function hydrateVideos(iterable $videos): void
     {

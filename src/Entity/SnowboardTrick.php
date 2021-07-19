@@ -37,9 +37,14 @@ class SnowboardTrick
     private string $name;
 
     /**
+     * @ORM\Column(type="string", length=170)
+     */
+    private string $slug;
+
+    /**
      * @Assert\Length(
      *      min = 10,
-     *      max = 500,
+     *      max = 1000,
      *      minMessage = "The name must be at least {{ limit }} characters long.",
      *      maxMessage = "The name cannot be longer than {{ limit }} characters."
      * )
@@ -114,6 +119,18 @@ class SnowboardTrick
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
