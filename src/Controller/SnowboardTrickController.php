@@ -15,7 +15,7 @@ class SnowboardTrickController extends AbstractController
     /**
      * Show the list of tricks.
      *
-     * @Route("/", name="app_homepage")
+     * @Route("/tricks", name="app_snowboard_trick_index")
      */
     public function index(): Response
     {
