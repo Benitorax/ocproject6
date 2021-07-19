@@ -7,4 +7,5 @@ twig:
 when@test:
     twig:
         strict_variables: true
-        
+        form_themes:
+            - 'form/_collection_widget.html.twig'

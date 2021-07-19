@@ -40,6 +40,8 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * Request to reset the password.
+     *
      * @Route("/forgot_password", name="app_password_request")
      */
     public function resetPasswordRequest(Request $request, UserManager $userManager): Response
@@ -70,6 +72,8 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * Reset the password.
+     *
      * @Route("/reset_password/{token}", name="app_password_reset")
      */
     public function resetPassword(string $token, Request $request, UserManager $userManager): Response
