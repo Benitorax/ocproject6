@@ -55,6 +55,7 @@ class UserController extends AbstractController
         }
 
         $userManager->activate($user);
+        $this->addFlash('success', 'Your account has been activated with success!');
 
         return $this->redirectToRoute('app_login');
     }
