@@ -1,0 +1,9 @@
+{% macro embed_video(source, url) %}
+    {% if source is same as ('youtube') %}
+        <iframe width="288" height="216" src="{{ url }}" title="YouTube video player" frameborder="0" allow="picture-in-picture" allowfullscreen></iframe>
+    {% elseif source is same as ('dailymotion') %}
+            <iframe autostart="false" frameborder="0" type="text/html" src="{{ url }}?autoplay=0" width="288" height="216" allowfullscreen></iframe> 
+    {% elseif source is same as ('vimeo') %}
+            <iframe src="{{ url }}" width="288" height="216" frameborder="0" allow="fullscreen; picture-in-picture" allowfullscreen></iframe>   
+    {% endif %}
+{% endmacro %}

@@ -28,8 +28,12 @@ class AppExtension extends AbstractExtension
     /**
      * Convert an Image instance to data url.
      */
-    public function imageToDataUrl(Image $image): string
+    public function imageToDataUrl(?Image $image): string
     {
+        if (!$image instanceof Image) {
+            return '/images/default.png';
+        }
+
         $format = preg_replace('/image\//', '', $image->getFormat());
 
         return 'data:image/' . $format . ';base64,' . base64_encode((string) $image->getData());

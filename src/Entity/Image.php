@@ -31,7 +31,7 @@ class Image
     /**
      * @Assert\NotBlank
      * @ORM\Column(type="blob")
-     * @var resource|string
+     * @var resource
      */
     private $data;
 
@@ -76,7 +76,7 @@ class Image
     }
 
     /**
-     * @return resource|string
+     * @return string
      */
     public function getData()
     {
@@ -84,7 +84,7 @@ class Image
     }
 
     /**
-     * @param resource|string $data
+     * @param resource $data
      */
     public function setData($data): self
     {

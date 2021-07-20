@@ -256,6 +256,11 @@ class SnowboardTrick
         return $this->category;
     }
 
+    public function getCategoryName(): ?string
+    {
+        return (string) array_search($this->category, Category::$categories);
+    }
+
     public function setCategory(string $category): self
     {
         $this->category = $category;

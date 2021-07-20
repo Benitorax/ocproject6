@@ -53,7 +53,7 @@ class SnowboardTrickController extends AbstractController
     /**
      * Show a detailed trick.
      *
-     * @Route("/trick/{name}", name="app_snowboard_trick_show")
+     * @Route("/trick/{slug}", name="app_snowboard_trick_show")
      */
     public function show(SnowboardTrick $trick): Response
     {
