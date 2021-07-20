@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Comment;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
+use App\Entity\SnowboardTrick;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Comment|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,4 +49,39 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+     * Returns an array of comments of the given trick.
+     *
+     * @return Comment[]
+     */
+    public function findBySnowboardTrick(SnowboardTrick $trick)
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.user', 'u')
+            ->addSelect('u')
+            ->andWhere('c.snowboardTrick = :trick')
+            ->setParameter('trick', $trick)
+            ->orderBy('c.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * Returns a Query object for comments of the given trick.
+     *
+     * @return Query
+     */
+    public function findBySnowboardTrickQuery(SnowboardTrick $trick)
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.user', 'u')
+            ->addSelect('u')
+            ->andWhere('c.snowboardTrick = :trick')
+            ->setParameter('trick', $trick)
+            ->orderBy('c.createdAt', 'ASC')
+            ->getQuery()
+        ;
+    }
 }

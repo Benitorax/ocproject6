@@ -40,39 +40,50 @@
                         <div class="mb-2 badge bg-success rounded-pill" style="font-size: 0.8rem">{{ trick.categoryName }}</div>
                     </div>
                     <hr>
-                    {{ form_start(form, {'attr': {
-                        'class': 'col-12 my-3 js-form-comment', 'action': path('app_snowboard_trick_show', {'slug': trick.slug})
-                    }}) }}
-                        <div class="d-flex flex-column flex-md-row justify-content-between">
-                            <div class="flex-grow-1">
-                                <div class="invalid-feedback mt-0 mb-1 js-error"></div>
-                                {{ form_widget(form.content, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+                    {% if app.user is null %}
+                        <div class="col-12 my-3 p-3">
+                            <p class="mb-3">You must be authenticated to submit a comment.</p>
+                            <p><a href="{{ path('app_login') }}">Click here</a> to log in.</p>
+                            <p>If you don't have an account, <a href="{{ path('app_user_create') }}">click here</a> to sign up.</p>
+                        </div>   
+                    {% else %}
+                        {{ form_start(form, {'attr': {
+                            'class': 'col-12 my-3 js-form-comment', 'action': path('app_snowboard_trick_show', {'slug': trick.slug})
+                        }}) }}
+                            <div class="d-flex flex-column flex-md-row justify-content-between">
+                                <div class="flex-grow-1">
+                                    <div class="invalid-feedback mt-0 mb-1 js-error"></div>
+                                    {{ form_widget(form.content, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+                                </div>
+                                <div class="align-self-center m-3">
+                                    <button type="submit" class="btn btn-primary js-button">Leave a comment</button>
+                                </div>
                             </div>
-                            <div class="align-self-center m-3">
-                                <button type="submit" class="btn btn-primary js-button">Leave a comment</button>
-                            </div>
-                        </div>
-                    {{ form_end(form) }}
+                        {{ form_end(form) }}
+                    {% endif %}
                     <hr>
-                    <div col="col-12">
-                        {% for index in range(1,3) %}
+                    <div col="col-12" id="comments">
+                        {% for comment in pagination %}
                             <div class="mb-1">
                                 <div class="border mx-auto d-md-flex flex-column flex-md-row" style="width: 100%;">
                                     <div class="bg-light px-2">
-                                        <div class="p-2">Username Long</div>
+                                        <div class="p-2">{{ comment.user.username }}</div>
                                         <div class="d-none d-md-block pt-2 px-4">
                                             <img class="rounded-circle" style="width: 90px;" src="https://cdn.pixabay.com/photo/2017/11/06/09/53/tiger-2923186_1280.jpg">
                                         </div>
                                     </div>
                                     <div class="px-2">
                                         <div class="p-2">
-                                            <small class="text-muted">Last updated 3 mins ago</small>
+                                            <small class="text-muted">Published the {{ comment.createdAt|date('j F Y') }}</small>
                                         </div>
-                                        <p class="p-2">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.<br>This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                        <p class="p-2">{{ comment.content }}</p>
                                     </div>
                                 </div>
                             </div>
+                        {% else %}
+                            <div class="text-center mb-2">No comment.</div>
                         {% endfor %}
+                        {% include 'pagination/_pagination.html.twig' %}
                     </div>
                 </div>
             </div>

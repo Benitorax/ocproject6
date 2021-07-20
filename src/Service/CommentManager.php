@@ -45,7 +45,15 @@ class CommentManager
      */
     public function getCommentsOfTrick(SnowboardTrick $trick)
     {
-        // dd($this->repository->findBySnowboardTrick($trick));
         return $this->repository->findBySnowboardTrick($trick);
+    }
+
+    /**
+     * Return Paginator.
+     */
+    public function getPagination(SnowboardTrick $trick, int $page): Paginator
+    {
+        $query = $this->repository->findBySnowboardTrickQuery($trick);
+        return (new Paginator())->paginate($query, $page, 10);
     }
 }

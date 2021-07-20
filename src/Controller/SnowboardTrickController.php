@@ -82,7 +82,12 @@ class SnowboardTrickController extends AbstractController
 
         return $this->render('snowboard-trick/show.html.twig', [
             'trick' => $trick,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'queryString' => http_build_query($request->query->all()),
+            'pagination' => $commentManager->getPagination(
+                $trick,
+                $request->query->get('page') <= 0 ? 1 : (int) $request->query->get('page')
+            )
         ]);
     }
 
