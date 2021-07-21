@@ -7,6 +7,7 @@ use App\Form\CommentType;
 use App\Entity\SnowboardTrick;
 use App\Service\CommentManager;
 use App\Form\SnowboardTrickType;
+use App\Repository\SnowboardTrickRepository;
 use Symfony\Component\Form\FormError;
 use App\Service\SnowboardTrickManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,9 +22,10 @@ class SnowboardTrickController extends AbstractController
      *
      * @Route("/tricks", name="app_snowboard_trick_index")
      */
-    public function index(): Response
+    public function index(SnowboardTrickRepository $repository): Response
     {
         return $this->render('snowboard-trick/index.html.twig', [
+            'tricks' => $repository->findAllTricks()
         ]);
     }
 
@@ -101,5 +103,19 @@ class SnowboardTrickController extends AbstractController
     {
         return $this->render('snowboard-trick/edit.html.twig', [
         ]);
+    }
+
+    /**
+     * Display a list of tricks.
+     *
+     * @Route("/api/trick", name="app_snowboard_trick_api")
+     */
+    public function apiTricks(Request $request, SnowboardTrickRepository $repository): Response
+    {
+        $content = $this->renderView('snowboard-trick/_tricks.html.twig', [
+            'tricks' => $repository->findAllTricks((int) $request->query->get('index'))
+        ]);
+
+        return $this->json(['body' => $content]);
     }
 }

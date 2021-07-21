@@ -14,7 +14,7 @@
                     {% for image in trick.images %}
                         <div class="col mb-3">
                             <div class="mx-auto" style="width: 18rem;">
-                                <img src="https://cdn.pixabay.com/photo/2018/02/23/17/56/snowboarding-3176182_1280.jpg" class="card-img-top" alt="...">
+                                <img src="{{ image|imageToDataUrl }}" style="height: 11.9rem;" class="card-img-top" alt="Trick image">
                             </div>
                         </div>
                     {% endfor %}

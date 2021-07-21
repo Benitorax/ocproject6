@@ -47,4 +47,20 @@ class SnowboardTrickRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+     * @return SnowboardTrick[] Return all the tricks.
+     */
+    public function findAlltricks(int $index = null)
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.illustration', 'i')
+            ->addSelect('i')
+            ->orderBy('s.name', 'ASC')
+            ->setFirstResult($index)
+            ->setMaxResults(8)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }
