@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DataFixtures\SnowboardTrickFixtures;
 use App\Form\CommentType;
 use App\Entity\SnowboardTrick;
 use App\Service\CommentManager;
