@@ -64,7 +64,10 @@ class SnowboardTrick
 
     /**
      * @var null|Image
-     * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(
+     *     targetEntity=Image::class,
+     *     cascade={"persist", "remove"}
+     * )
      */
     private $illustration;
 
@@ -213,9 +216,9 @@ class SnowboardTrick
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
-            // if ($image->getSnowboardTrick() === $this) {
-            //     $image->setSnowboardTrick(null);
-            // }
+            if ($image->getSnowboardTrick() === $this) {
+                $image->setSnowboardTrick(null);
+            }
         }
 
         return $this;
@@ -243,9 +246,9 @@ class SnowboardTrick
     {
         if ($this->videos->contains($video)) {
             $this->videos->removeElement($video);
-            // if ($video->getSnowboardTrick() === $this) {
-            //     $video->setSnowboardTrick(null);
-            // }
+            if ($video->getSnowboardTrick() === $this) {
+                $video->setSnowboardTrick(null);
+            }
         }
 
         return $this;

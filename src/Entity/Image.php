@@ -98,7 +98,7 @@ class Image
         return $this->snowboardTrick;
     }
 
-    public function setSnowboardTrick(SnowboardTrick $snowboardTrick): self
+    public function setSnowboardTrick(?SnowboardTrick $snowboardTrick): self
     {
         $this->snowboardTrick = $snowboardTrick;
 

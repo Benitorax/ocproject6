@@ -1,3 +1,5 @@
+import openDeleteModalCallback from '/js/modal.js';
+
 ! function() {
     function scrollToElement(element) {
         element.scrollIntoView();
@@ -69,6 +71,13 @@
             if (data.body.length > 0) {
                 const fragment = document.createRange().createContextualFragment(data.body);
                 document.getElementById('tricks-content').appendChild(fragment);
+                let deleteButtons = document.querySelectorAll('.js-modal-delete');
+
+                deleteButtons.forEach(function(deleteButton) {
+                    deleteButton.removeEventListener('click', openDeleteModalCallback);
+                    deleteButton.addEventListener('click', openDeleteModalCallback);
+                });
+
             } else {
                 hideElement(spinner);
             }

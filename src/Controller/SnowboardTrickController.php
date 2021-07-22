@@ -106,6 +106,21 @@ class SnowboardTrickController extends AbstractController
     }
 
     /**
+     * Delete a trick.
+     *
+     * @Route("/trick/{slug}/delete", methods={"POST"}, name="app_snowboard_trick_delete")
+     */
+    public function delete(SnowboardTrick $trick, Request $request, SnowboardTrickManager $manager): Response
+    {
+        if ($this->isCsrfTokenValid('delete-trick', (string) $request->request->get('_token'))) {
+            $manager->deleteTrick($trick);
+            $this->addFlash('success', 'The snowboard trick has been deleted with success!');
+        }
+
+        return $this->redirectToRoute('app_snowboard_trick_index');
+    }
+
+    /**
      * Display a list of tricks.
      *
      * @Route("/api/trick", name="app_snowboard_trick_api")

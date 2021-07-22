@@ -33,7 +33,7 @@ class Video
      * @ORM\ManyToOne(targetEntity=SnowboardTrick::class, inversedBy="videos")
      * @ORM\JoinColumn(nullable=false)
      */
-    private SnowboardTrick $snowboardTrick;
+    private ?SnowboardTrick $snowboardTrick;
 
     /**
      * Used only for VideoType.
@@ -69,12 +69,12 @@ class Video
         return $this;
     }
 
-    public function getSnowboardTrick(): SnowboardTrick
+    public function getSnowboardTrick(): ?SnowboardTrick
     {
         return $this->snowboardTrick;
     }
 
-    public function setSnowboardTrick(SnowboardTrick $snowboardTrick): self
+    public function setSnowboardTrick(?SnowboardTrick $snowboardTrick): self
     {
         $this->snowboardTrick = $snowboardTrick;
 
