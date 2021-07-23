@@ -71,7 +71,7 @@
 
         // Display the form in the page in an div, before the "Add" link
         let divElement = document.createElement("div");
-        divElement.classList.add('card', 'mb-2', 'mx-auto');
+        divElement.classList.add('card', 'mx-auto');
         divElement.style.width = "19.6rem";
         divElement.innerHTML = newForm;
 

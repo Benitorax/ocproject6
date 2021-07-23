@@ -37,9 +37,14 @@ class SnowboardTrick
     private string $name;
 
     /**
+     * @ORM\Column(type="string", length=170)
+     */
+    private string $slug;
+
+    /**
      * @Assert\Length(
      *      min = 10,
-     *      max = 500,
+     *      max = 1000,
      *      minMessage = "The name must be at least {{ limit }} characters long.",
      *      maxMessage = "The name cannot be longer than {{ limit }} characters."
      * )
@@ -59,7 +64,10 @@ class SnowboardTrick
 
     /**
      * @var null|Image
-     * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(
+     *     targetEntity=Image::class,
+     *     cascade={"persist", "remove"}
+     * )
      */
     private $illustration;
 
@@ -114,6 +122,18 @@ class SnowboardTrick
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
@@ -196,9 +216,9 @@ class SnowboardTrick
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
-            // if ($image->getSnowboardTrick() === $this) {
-            //     $image->setSnowboardTrick(null);
-            // }
+            if ($image->getSnowboardTrick() === $this) {
+                $image->setSnowboardTrick(null);
+            }
         }
 
         return $this;
@@ -226,9 +246,9 @@ class SnowboardTrick
     {
         if ($this->videos->contains($video)) {
             $this->videos->removeElement($video);
-            // if ($video->getSnowboardTrick() === $this) {
-            //     $video->setSnowboardTrick(null);
-            // }
+            if ($video->getSnowboardTrick() === $this) {
+                $video->setSnowboardTrick(null);
+            }
         }
 
         return $this;
@@ -237,6 +257,11 @@ class SnowboardTrick
     public function getCategory(): ?string
     {
         return $this->category;
+    }
+
+    public function getCategoryName(): ?string
+    {
+        return (string) array_search($this->category, Category::$categories);
     }
 
     public function setCategory(string $category): self

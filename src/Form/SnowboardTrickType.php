@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Form\ImageType;
 use App\Form\VideoType;
 use App\Entity\SnowboardTrick;
@@ -76,5 +77,16 @@ class SnowboardTrickType extends AbstractType
         $resolver->setDefaults([
             'data_class' => SnowboardTrick::class,
         ]);
+    }
+
+    /**
+     * Return an array of categories with select option at first key.
+     */
+    private function getChoices(): array
+    {
+        return array_merge(
+            ['Select a category' => ''],
+            Category::$categories
+        );
     }
 }

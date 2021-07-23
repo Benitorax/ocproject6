@@ -31,7 +31,7 @@ class Image
     /**
      * @Assert\NotBlank
      * @ORM\Column(type="blob")
-     * @var resource|string
+     * @var string|resource
      */
     private $data;
 
@@ -76,15 +76,15 @@ class Image
     }
 
     /**
-     * @return resource|string
+     * @return string|resource
      */
     public function getData()
     {
-        return (string) stream_get_contents($this->data);
+        return stream_get_contents($this->data); /* @phpstan-ignore-line */
     }
 
     /**
-     * @param resource|string $data
+     * @param string|resource $data
      */
     public function setData($data): self
     {
@@ -98,7 +98,7 @@ class Image
         return $this->snowboardTrick;
     }
 
-    public function setSnowboardTrick(SnowboardTrick $snowboardTrick): self
+    public function setSnowboardTrick(?SnowboardTrick $snowboardTrick): self
     {
         $this->snowboardTrick = $snowboardTrick;
 

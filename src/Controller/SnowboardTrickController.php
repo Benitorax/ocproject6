@@ -2,7 +2,13 @@
 
 namespace App\Controller;
 
+use App\DataFixtures\SnowboardTrickFixtures;
+use App\Form\CommentType;
+use App\Entity\SnowboardTrick;
+use App\Service\CommentManager;
 use App\Form\SnowboardTrickType;
+use App\Repository\SnowboardTrickRepository;
+use Symfony\Component\Form\FormError;
 use App\Service\SnowboardTrickManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,22 +20,12 @@ class SnowboardTrickController extends AbstractController
     /**
      * Show the list of tricks.
      *
-     * @Route("/", name="app_homepage")
+     * @Route("/tricks", name="app_snowboard_trick_index")
      */
-    public function index(): Response
+    public function index(SnowboardTrickRepository $repository): Response
     {
         return $this->render('snowboard-trick/index.html.twig', [
-        ]);
-    }
-
-    /**
-     * Show a detailed trick.
-     *
-     * @Route("/trick/name", name="app_snowboard_trick_show")
-     */
-    public function show(): Response
-    {
-        return $this->render('snowboard-trick/show.html.twig', [
+            'tricks' => $repository->findAllTricks()
         ]);
     }
 
@@ -61,6 +57,44 @@ class SnowboardTrickController extends AbstractController
     }
 
     /**
+     * Show a detailed trick.
+     *
+     * @Route("/trick/{slug}", name="app_snowboard_trick_show")
+     */
+    public function show(Request $request, SnowboardTrick $trick, CommentManager $commentManager): Response
+    {
+        $form = $this->createForm(CommentType::class);
+
+        if ($this->getUser()) {
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $commentManager->saveNewComment($form->getData(), $trick);
+                $this->addFlash('success', 'Your comment has been submitted with success!');
+
+                return $this->json([
+                    'url' => $this->generateUrl('app_snowboard_trick_show', ['slug' => $trick->getSlug()])
+                ], 303);
+            } elseif ($form->isSubmitted()) {
+                /** @var FormError */
+                $error = $form->get('content')->getErrors()[0];
+
+                return $this->json(['error' => $error->getMessage()], 422);
+            }
+        }
+
+        return $this->render('snowboard-trick/show.html.twig', [
+            'trick' => $trick,
+            'form' => $form->createView(),
+            'queryString' => http_build_query($request->query->all()),
+            'pagination' => $commentManager->getPagination(
+                $trick,
+                $request->query->get('page') <= 0 ? 1 : (int) $request->query->get('page')
+            )
+        ]);
+    }
+
+    /**
      * Edit a trick.
      *
      * @Route("/trick/name/edit", name="app_snowboard_trick_edit")
@@ -69,5 +103,34 @@ class SnowboardTrickController extends AbstractController
     {
         return $this->render('snowboard-trick/edit.html.twig', [
         ]);
+    }
+
+    /**
+     * Delete a trick.
+     *
+     * @Route("/trick/{slug}/delete", methods={"POST"}, name="app_snowboard_trick_delete")
+     */
+    public function delete(SnowboardTrick $trick, Request $request, SnowboardTrickManager $manager): Response
+    {
+        if ($this->isCsrfTokenValid('delete-trick', (string) $request->request->get('_token'))) {
+            $manager->deleteTrick($trick);
+            $this->addFlash('success', 'The snowboard trick has been deleted with success!');
+        }
+
+        return $this->redirectToRoute('app_snowboard_trick_index');
+    }
+
+    /**
+     * Display a list of tricks.
+     *
+     * @Route("/api/trick", name="app_snowboard_trick_api")
+     */
+    public function apiTricks(Request $request, SnowboardTrickRepository $repository): Response
+    {
+        $content = $this->renderView('snowboard-trick/_tricks.html.twig', [
+            'tricks' => $repository->findAllTricks((int) $request->query->get('index'))
+        ]);
+
+        return $this->json(['body' => $content]);
     }
 }
