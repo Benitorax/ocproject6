@@ -49,7 +49,7 @@ class SnowboardTrickRepository extends ServiceEntityRepository
     */
 
     /**
-     * @return SnowboardTrick[] Return all the tricks.
+     * @return SnowboardTrick[] Return 8 tricks for the given index.
      */
     public function findAlltricks(int $index = null)
     {
@@ -61,6 +61,25 @@ class SnowboardTrickRepository extends ServiceEntityRepository
             ->setMaxResults(8)
             ->getQuery()
             ->getResult()
+        ;
+    }
+
+    /**
+     * @return SnowboardTrick
+     */
+    public function findOneWithRelation(string $slug)
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.illustration', 'i')
+            ->addSelect('i')
+            ->leftJoin('s.videos', 'v')
+            ->addSelect('v')
+            ->leftJoin('s.images', 'img')
+            ->addSelect('img')
+            ->andWhere('s.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult()
         ;
     }
 }

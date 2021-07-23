@@ -62,7 +62,10 @@
     }
 
     // add id to pagination links
-    document.querySelector('.pagination').querySelectorAll('a').forEach(function(element) {
-        element.href += '#comments';
-    });
+    let pagination = document.querySelector('.pagination');
+    if (pagination !== null) {
+        pagination.querySelectorAll('a').forEach(function(element) {
+            element.href += '#comments';
+        });
+    }
 }()

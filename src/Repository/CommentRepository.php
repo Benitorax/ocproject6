@@ -51,24 +51,6 @@ class CommentRepository extends ServiceEntityRepository
     */
 
     /**
-     * Returns an array of comments of the given trick.
-     *
-     * @return Comment[]
-     */
-    public function findBySnowboardTrick(SnowboardTrick $trick)
-    {
-        return $this->createQueryBuilder('c')
-            ->leftJoin('c.user', 'u')
-            ->addSelect('u')
-            ->andWhere('c.snowboardTrick = :trick')
-            ->setParameter('trick', $trick)
-            ->orderBy('c.createdAt', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    /**
      * Returns a Query object for comments of the given trick.
      *
      * @return Query
@@ -78,6 +60,8 @@ class CommentRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->leftJoin('c.user', 'u')
             ->addSelect('u')
+            ->leftJoin('u.avatar', 'a')
+            ->addSelect('a')
             ->andWhere('c.snowboardTrick = :trick')
             ->setParameter('trick', $trick)
             ->orderBy('c.createdAt', 'ASC')

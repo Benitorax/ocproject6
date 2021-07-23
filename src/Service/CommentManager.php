@@ -39,16 +39,6 @@ class CommentManager
     }
 
     /**
-     * Return comments of the given trick.
-     *
-     * @return Comment[]
-     */
-    public function getCommentsOfTrick(SnowboardTrick $trick)
-    {
-        return $this->repository->findBySnowboardTrick($trick);
-    }
-
-    /**
      * Return Paginator.
      */
     public function getPagination(SnowboardTrick $trick, int $page): Paginator
