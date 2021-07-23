@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\User;
+use App\Entity\Image;
 use App\Service\Mailer;
 use App\Entity\UserToken;
 use Doctrine\ORM\EntityManagerInterface;
@@ -82,5 +83,26 @@ class UserManager
     public function validateTokenAndFetchUser(int $type, string $token): User
     {
         return $this->tokenManager->validateTokenAndFetchUser($type, $token);
+    }
+
+    /**
+     * Modify avatar.
+     */
+    public function modifyAvatar(User $user, Image $image): void
+    {
+        $this->entityManager->remove($user->getAvatar()); /** @phpstan-ignore-line */
+        $user->setAvatar($image);
+        $this->entityManager->persist($image);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * Delete avatar.
+     */
+    public function deleteAvatar(User $user): void
+    {
+        $this->entityManager->remove($user->getAvatar()); /** @phpstan-ignore-line */
+        $user->setAvatar(null);
+        $this->entityManager->flush();
     }
 }

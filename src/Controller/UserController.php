@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\AvatarType;
 use App\Form\SignupType;
 use App\Entity\UserToken;
 use App\Service\UserManager;
@@ -58,5 +60,32 @@ class UserController extends AbstractController
         $this->addFlash('success', 'Your account has been activated with success!');
 
         return $this->redirectToRoute('app_login');
+    }
+
+    /**
+     * Modify user avatar.
+     *
+     * @Route("/account/avatar", name="app_user_avatar")
+     */
+    public function modifyAvatar(Request $request, UserManager $userManager): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        /** @var User */ $user = $this->getUser();
+        $form = $this->createForm(AvatarType::class);
+        $form->handleRequest($request);
+
+        if ($form->get('delete')->isClicked()) { /** @phpstan-ignore-line */
+            $userManager->deleteAvatar($user);
+            $this->addFlash('success', 'The avatar has been deleted with success!');
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userManager->modifyAvatar($user, $form->getData()['image']);
+            $this->addFlash('success', 'The avatar has been modified with success!');
+        }
+
+        return $this->render('user/avatar.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

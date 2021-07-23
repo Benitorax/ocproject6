@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\IdentifierTrait;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ImageRepository;
@@ -12,11 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Image
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     */
-    private Uuid $id;
+    use IdentifierTrait;
 
     /**
      * @Assert\Choice({
@@ -29,23 +26,22 @@ class Image
     private string $format;
 
     /**
-     * @Assert\NotBlank
      * @ORM\Column(type="blob")
      * @var string|resource
      */
-    private $data;
+    private $data = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=SnowboardTrick::class, inversedBy="images")
-     * @ORM\JoinColumn(nullable=false)
      */
     private ?SnowboardTrick $snowboardTrick = null;
 
     /**
      * Used only for ImageType.
      * @var mixed
+     * @Assert\NotNull(message="An image should be selected.")
      */
-    private $file;
+    private $file = null;
 
     /**
      * @ORM\Column(type="datetime_immutable")
@@ -54,13 +50,8 @@ class Image
 
     public function __construct()
     {
-        $this->id = Uuid::v4();
+        $this->uuid = Uuid::v4();
         $this->createdAt = new \DateTimeImmutable();
-    }
-
-    public function getId(): ?Uuid
-    {
-        return $this->id;
     }
 
     public function getFormat(): string
@@ -80,6 +71,10 @@ class Image
      */
     public function getData()
     {
+        if (is_string($this->data)) {
+            return $this->data;
+        }
+
         return stream_get_contents($this->data); /* @phpstan-ignore-line */
     }
 

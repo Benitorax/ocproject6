@@ -60,6 +60,7 @@
                                 </div>
                             </div>
                         {{ form_end(form) }}
+                        <div class="mb-3"><a href="{{ path('app_user_avatar') }}" target="_blank">Click here</a> to modify your avatar.</div>
                     {% endif %}
                     <hr>
                     <div col="col-12" id="comments">
@@ -68,8 +69,8 @@
                                 <div class="border mx-auto d-md-flex flex-column flex-md-row" style="width: 100%;">
                                     <div class="bg-light px-2">
                                         <div class="p-2">{{ comment.user.username }}</div>
-                                        <div class="d-none d-md-block pt-2 px-4">
-                                            <img class="rounded-circle" style="width: 90px;" src="https://cdn.pixabay.com/photo/2017/11/06/09/53/tiger-2923186_1280.jpg">
+                                        <div class="d-none d-md-block py-3 px-4">
+                                            <img class="rounded-circle" style="width: 90px; height: 90px" src="{{ comment.user.avatar|imageToDataUrl }}">
                                         </div>
                                     </div>
                                     <div class="px-2">
