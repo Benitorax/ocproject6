@@ -129,4 +129,14 @@ class Image
 
         return $this;
     }
+
+    public function __clone()
+    {
+        $this->uuid = Uuid::v4();
+        $this->format = $this->format;
+        $this->data = $this->data;
+        $this->file = $this->file;
+        $this->createdAt = new \DateTimeImmutable('now');
+        $this->snowboardTrick = null;
+    }
 }

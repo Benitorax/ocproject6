@@ -22,12 +22,12 @@ class Video
     /**
      * @ORM\Column(type="text")
      */
-    private string $url;
+    private ?string $url = null;
 
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private string $source;
+    private ?string $source = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=SnowboardTrick::class, inversedBy="videos")
@@ -38,7 +38,7 @@ class Video
     /**
      * Used only for VideoType.
      */
-    private string $tagOrUrl;
+    private ?string $tagOrUrl = null;
 
     public function getId(): ?int
     {
