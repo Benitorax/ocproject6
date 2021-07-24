@@ -26,12 +26,20 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
      */
     public function load(ObjectManager $manager): void
     {
+        $batchSize = 3;
+        $i = 0;
+
         for ($i = 0; $i < 10; $i++) {
             $user = $this->createUser();
             $manager->persist($user);
             $manager->persist($user->getAvatar()); /** @phpstan-ignore-line */
+
+            if (($i % $batchSize) === 0) {
+                $manager->flush();
+                $manager->clear();
+            }
+
             $this->addReference(self::USER_REFERENCE . '-' . $i, $user);
-            $i++;
         }
 
         $manager->flush();

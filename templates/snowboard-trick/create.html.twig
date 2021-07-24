@@ -20,7 +20,7 @@
         <div class="row justify-content-center my-2">
             <div class="col-12 col-md-9 gx-1 gx-0 border">
                 <div class="position-relative">
-                    <img id="image-banner" style="max-height: 500px; width: 100%" src="{{ asset('images/default.png') }}">
+                    <img id="image-banner" style="max-height: 650px; width: 100%" src="{{ asset('images/default.png') }}">
                     <h1 id="title-banner" class="position-absolute top-50 start-50 translate-middle text-white text-center px-5 py-2 rounded h1">
                         {% if form.name.vars.data %}{{ form.name.vars.data }}{% else %}Trick Name{% endif %}
                     </h1>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-12 mx-auto">
                         <div class="mb-3">
-                            {% form_theme form.images with ['form/_collection_widget_edit.html.twig'] %}
+                            {% form_theme form.images with ['form/_collection_widget.html.twig'] %}
                             <label class="form-label label-collection py-2 mb-3">Images</label> 
                             <div id="{{ form.images.vars.id }}" class="{{ form.images.vars.id }} js-collection-holder d-flex justify-content-between flex-wrap" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
                                 {{ form_widget(form.images) }}
@@ -63,7 +63,7 @@
                             <button type="button" class="btn btn-link add_item_link my-2" data-collection-holder-class="{{ form.images.vars.id }}">+ Add image</button>
                         </div>
                         <div class="mb-3">
-                            {% form_theme form.videos with ['form/_collection_widget_edit.html.twig'] %}
+                            {% form_theme form.videos with ['form/_collection_widget.html.twig'] %}
                             <label class="form-label label-collection py-2 mb-3">Video</label> 
                             <div id="{{ form.videos.vars.id }}" class="{{ form.videos.vars.id }} js-collection-holder d-flex justify-content-between flex-wrap" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
                                 {{ form_widget(form.videos) }}

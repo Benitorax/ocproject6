@@ -75,7 +75,7 @@ class Image
             return $this->data;
         }
 
-        return stream_get_contents($this->data); /* @phpstan-ignore-line */
+        return stream_get_contents($this->data, -1, 0); /* @phpstan-ignore-line */
     }
 
     /**

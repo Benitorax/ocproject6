@@ -116,7 +116,7 @@ class SnowboardTrickController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $trickManager->saveEditedTrick($form->getData());
-                $this->addFlash('success', 'A trick has been edited with success!');
+                $this->addFlash('success', 'The snowboard trick has been edited with success!');
 
                 return $this->redirectToRoute('app_homepage');
             } elseif ($form->isSubmitted()) {
