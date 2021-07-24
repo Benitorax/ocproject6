@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit your avatar{% endblock %}
+
+{% block body %}
+    <main class="container">
+        <div class="row justify-content-center my-2">
+            <div class="col-12 col-md-9 col-lg-6">
+                <h1 class="text-center my-5 d-none d-md-block">Avatar</h1>
+                <div class="card mx-auto text-center">
+                    <div class="card-body">
+                        <h1 class="card-title my-3 d-block d-md-none">Avatar</h1>
+                        <div class="p-2">
+                            <img class="rounded-circle" style="width: 90px; height: 90px;" src="{{ app.user.avatar|imageToDataUrl }}">
+                        </div>
+                        {% if form.vars.submitted and (form.vars.valid or form.delete.vars.clicked) %}
+                            <div class="my-3">Submitted!</div>
+                        {% else %}
+                            {{ form_start(form, {'attr': {'class': 'row my-5 my-md-3'}}) }}
+                                <div class="col-12 col-md-9 mx-auto text-center">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="username">Select an image</label>
+                                        {% for error in form.image.file.vars.errors %}
+                                            <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
+                                        {% endfor %}
+                                        {{ form_widget(form.image.file, {'attr': {'class': 'form-control', 'id': 'file'}, 'required': false}) }}
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    {{ form_widget(form.delete, {'attr': {'class': 'btn btn-danger'}}) }}
+                                    {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
+                                </div>
+                            {{ form_end(form) }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

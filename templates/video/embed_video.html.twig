@@ -1,9 +1,9 @@
 {% macro embed_video(source, url) %}
     {% if source is same as ('youtube') %}
-        <iframe width="288" height="216" frameborder="0" src="{{ url }}" title="{{ source|capitalize }} video player" allow="picture-in-picture" allowfullscreen></iframe>
+        <iframe width="288" height="216" frameborder="0" src="{{ url }}" title="{{ source|capitalize }} video player" allowfullscreen></iframe>
     {% elseif source is same as ('dailymotion') %}
         <iframe width="288" height="216" frameborder="0" src="{{ url }}" title="{{ source|capitalize }} video player" type="text/html" allowfullscreen></iframe> 
     {% elseif source is same as ('vimeo') %}
-        <iframe width="288" height="216" frameborder="0" src="{{ url }}" title="{{ source|capitalize }} video player" allow="fullscreen; picture-in-picture" allowfullscreen></iframe>   
+        <iframe width="288" height="216" frameborder="0" src="{{ url }}" title="{{ source|capitalize }} video player" allowfullscreen></iframe>   
     {% endif %}
 {% endmacro %}

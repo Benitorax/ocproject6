@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\DataFixtures\SnowboardTrickFixtures;
 use App\Form\CommentType;
-use App\Entity\SnowboardTrick;
 use App\Service\CommentManager;
 use App\Form\SnowboardTrickType;
 use App\Repository\SnowboardTrickRepository;
@@ -47,7 +45,7 @@ class SnowboardTrickController extends AbstractController
 
                 return $this->redirectToRoute('app_homepage');
             } elseif ($form->isSubmitted()) {
-                $this->addFlash('danger', 'Please, correct any field errors.');
+                $this->addFlash('danger', 'Please, correct any field with errors.');
             }
         }
 
@@ -61,8 +59,13 @@ class SnowboardTrickController extends AbstractController
      *
      * @Route("/trick/{slug}", name="app_snowboard_trick_show")
      */
-    public function show(Request $request, SnowboardTrick $trick, CommentManager $commentManager): Response
-    {
+    public function show(
+        string $slug,
+        Request $request,
+        SnowboardTrickRepository $repository,
+        CommentManager $commentManager
+    ): Response {
+        $trick = $repository->findOneWithRelation($slug);
         $form = $this->createForm(CommentType::class);
 
         if ($this->getUser()) {
@@ -73,7 +76,7 @@ class SnowboardTrickController extends AbstractController
                 $this->addFlash('success', 'Your comment has been submitted with success!');
 
                 return $this->json([
-                    'url' => $this->generateUrl('app_snowboard_trick_show', ['slug' => $trick->getSlug()])
+                    'url' => $this->generateUrl('app_snowboard_trick_show', ['slug' => $slug])
                 ], 303);
             } elseif ($form->isSubmitted()) {
                 /** @var FormError */
@@ -97,11 +100,33 @@ class SnowboardTrickController extends AbstractController
     /**
      * Edit a trick.
      *
-     * @Route("/trick/name/edit", name="app_snowboard_trick_edit")
+     * @Route("/trick/{slug}/edit", name="app_snowboard_trick_edit")
      */
-    public function edit(): Response
-    {
+    public function edit(
+        string $slug,
+        Request $request,
+        SnowboardTrickRepository $trickRepository,
+        SnowboardTrickManager $trickManager
+    ): Response {
+        $trick = $trickRepository->findOneWithRelation($slug);
+        $form = $this->createForm(SnowboardTrickType::class, $trick);
+
+        if ($this->getUser()) {
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $trickManager->saveEditedTrick($form->getData());
+                $this->addFlash('success', 'The snowboard trick has been edited with success!');
+
+                return $this->redirectToRoute('app_homepage');
+            } elseif ($form->isSubmitted()) {
+                $this->addFlash('danger', 'Please, correct any field with errors.');
+            }
+        }
+
         return $this->render('snowboard-trick/edit.html.twig', [
+            'form' => $form->createView(),
+            'trick' => $trick
         ]);
     }
 
@@ -110,10 +135,10 @@ class SnowboardTrickController extends AbstractController
      *
      * @Route("/trick/{slug}/delete", methods={"POST"}, name="app_snowboard_trick_delete")
      */
-    public function delete(SnowboardTrick $trick, Request $request, SnowboardTrickManager $manager): Response
+    public function delete(string $slug, Request $request, SnowboardTrickManager $manager): Response
     {
         if ($this->isCsrfTokenValid('delete-trick', (string) $request->request->get('_token'))) {
-            $manager->deleteTrick($trick);
+            $manager->deleteTrickBySlug($slug);
             $this->addFlash('success', 'The snowboard trick has been deleted with success!');
         }
 

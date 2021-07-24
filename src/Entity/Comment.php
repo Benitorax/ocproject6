@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentRepository;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -12,12 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Comment
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private int $id;
+    use IdentifierTrait;
 
     /**
      * @Assert\Length(
@@ -49,12 +45,8 @@ class Comment
 
     public function __construct()
     {
+        $this->uuid = Uuid::v4();
         $this->createdAt = new \DateTimeImmutable('now');
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getContent(): ?string

@@ -4,6 +4,9 @@ namespace App\Entity;
 
 class Category
 {
+    /**
+     * List of categories.
+     */
     public static array $categories = [
         'Straight airs' => 1,
         'Grabs' => 2,

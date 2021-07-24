@@ -1,31 +1,56 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SnowTricks{% endblock %}
+{% block title %}SnowTricks - {{ trick.name }} details{% endblock %}
 
 {% block body %}
     <main class="container">
         <div class="row justify-content-center my-2">
             <div class="col-12 col-md-9 gx-1 gx-0 border">
                 <div class="position-relative">
-                    <img style="max-height: 500px; width: 100%" src="{{ trick.illustration|imageToDataUrl }}">
+                    <img style="max-height: 650px; width: 100%" src="{{ trick.illustration|imageToDataUrl }}">
                     <h1 class="position-absolute top-50 start-50 translate-middle text-white text-center bg-dark px-5 py-2 rounded h1">{{ trick.name }}</h1>
+                    {% if app.user is not same as (null) %}
+                        <div class="position-absolute top-0 end-0 d-flex bg-white m-2 rounded">
+                            <div class="py-2 px-3">
+                                <a href="{{ path('app_snowboard_trick_edit', {slug: trick.slug}) }}" class="js-icon-edit" style="cursor: pointer;">
+                                    <svg class="text-secondary" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="py-2 px-3">
+                                <span class="js-modal-delete" style="cursor: pointer;" data-url="{{ path('app_snowboard_trick_delete', {slug: trick.slug}) }}" data-name="{{ trick.name }}">
+                                    <svg class="text-danger" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
-                <div class="row my-3">
-                    {% for image in trick.images %}
-                        <div class="col mb-3">
-                            <div class="mx-auto" style="width: 18rem;">
-                                <img src="{{ image|imageToDataUrl }}" style="height: 11.9rem;" class="card-img-top" alt="Trick image">
+                <div class="d-block d-md-none">
+                    <div class="d-flex">
+                        <div class="badge bg-primary my-3 px-3 py-2 mx-auto js-media-button" style="font-size: 1rem">See medias</div>
+                    </div>
+                </div>
+                <div class="d-none d-md-block js-media-content">
+                    <div class="row my-3">
+                        {% for image in trick.images %}
+                            <div class="col mb-3">
+                                <div class="mx-auto" style="width: 18rem; height: 11.9rem;">
+                                    <img src="{{ image|imageToDataUrl }}" class="card-img-top" alt="Trick image">
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                    {% from 'video/embed_video.html.twig' import embed_video %}
-                    {% for video in trick.videos %}
-                        <div class="col mb-3">
-                            <div class="mx-auto" style="width: 18rem;">
-                                {{ embed_video(video.source, video.url) }}
+                        {% endfor %}
+                        {% from 'video/embed_video.html.twig' import embed_video %}
+                        {% for video in trick.videos %}
+                            <div class="col mb-3">
+                                <div class="mx-auto" style="width: 18rem;">
+                                    {{ embed_video(video.source, video.url) }}
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="row px-2 px-md-5 my-2">
                     <div class="col-12">
@@ -33,11 +58,11 @@
                         </div>
                     </div>
                     <div class="col-12 d-flex flex-wrap justify-content-around my-5">
-                        <div class="mb-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Published the {{ trick.createdAt|date('j F Y') }}</div>
+                        <div class="mb-2 px-3 py-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Published the {{ trick.createdAt|date('j F Y') }}</div>
                         {% if trick.createdAt is same as (trick.updatedAt) %}
                             <div class="mb-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Updated the {{ trick.updatedAt|date('j F Y') }}</div>
                         {% endif %}
-                        <div class="mb-2 badge bg-success rounded-pill" style="font-size: 0.8rem">{{ trick.categoryName }}</div>
+                        <div class="mb-2 px-3 py-2 badge bg-success rounded-pill" style="font-size: 0.8rem">{{ trick.categoryName }}</div>
                     </div>
                     <hr>
                     {% if app.user is null %}
@@ -60,6 +85,7 @@
                                 </div>
                             </div>
                         {{ form_end(form) }}
+                        <div class="mb-3"><a href="{{ path('app_user_avatar') }}" target="_blank">Click here</a> to modify your avatar.</div>
                     {% endif %}
                     <hr>
                     <div col="col-12" id="comments">
@@ -68,8 +94,8 @@
                                 <div class="border mx-auto d-md-flex flex-column flex-md-row" style="width: 100%;">
                                     <div class="bg-light px-2">
                                         <div class="p-2">{{ comment.user.username }}</div>
-                                        <div class="d-none d-md-block pt-2 px-4">
-                                            <img class="rounded-circle" style="width: 90px;" src="https://cdn.pixabay.com/photo/2017/11/06/09/53/tiger-2923186_1280.jpg">
+                                        <div class="d-none d-md-block py-3 px-4">
+                                            <img class="rounded-circle" style="width: 90px; height: 90px" src="{{ comment.user.avatar|imageToDataUrl }}">
                                         </div>
                                     </div>
                                     <div class="px-2">
@@ -89,10 +115,12 @@
             </div>
         </div>
     </main>
+    {% include 'modal/_modal.html.twig' %}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/comment.js') }}" defer></script>
+    <script type="module" src="{{ asset('js/modal.js') }}" defer></script>
 {% endblock %}
 {% block stylesheets %}
     {{ parent() }}

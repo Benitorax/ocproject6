@@ -6,10 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -24,12 +26,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private int $id;
+    use IdentifierTrait;
 
     /**
      * @Assert\Length(
@@ -59,11 +56,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private string $email;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     /**
      * @Assert\Length(
      *      min = 6,
@@ -82,12 +74,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity=UserToken::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=UserToken::class, mappedBy="user", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $tokens;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"}, fetch="EAGER")
+     * @JoinColumn(onDelete="CASCADE")
+     */
+    private ?Image $avatar = null;
+
     public function __construct()
     {
+        $this->uuid = Uuid::v4();
         $this->tokens = new ArrayCollection();
     }
 
@@ -197,5 +196,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getTokens(): Collection
     {
         return $this->tokens;
+    }
+
+    public function getAvatar(): ?Image
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?Image $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
     }
 }

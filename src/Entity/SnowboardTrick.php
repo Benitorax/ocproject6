@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use App\Repository\SnowboardTrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OrderBy;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -19,11 +21,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class SnowboardTrick
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     */
-    private Uuid $id;
+    use IdentifierTrait;
 
     /**
      * @Assert\Length(
@@ -66,7 +64,8 @@ class SnowboardTrick
      * @var null|Image
      * @ORM\OneToOne(
      *     targetEntity=Image::class,
-     *     cascade={"persist", "remove"}
+     *     cascade={"persist"},
+     *     fetch="EAGER",
      * )
      */
     private $illustration;
@@ -76,8 +75,9 @@ class SnowboardTrick
      *     targetEntity=Image::class,
      *     mappedBy="snowboardTrick",
      *     orphanRemoval=true,
-     *     cascade={"persist", "remove"}
+     *     cascade={"persist", "remove"},
      * )
+     * @OrderBy({"createdAt" = "ASC"})
      */
     private Collection $images;
 
@@ -104,14 +104,9 @@ class SnowboardTrick
 
     public function __construct()
     {
-        $this->id = Uuid::v4();
+        $this->uuid = Uuid::v4();
         $this->images = new ArrayCollection();
         $this->videos = new ArrayCollection();
-    }
-
-    public function getId(): ?Uuid
-    {
-        return $this->id;
     }
 
     public function getName(): ?string
@@ -181,15 +176,7 @@ class SnowboardTrick
 
     public function setIllustration(?Image $illustration): self
     {
-        if (!$illustration instanceof Image) {
-            return $this;
-        }
-
         $this->illustration = $illustration;
-
-        if (null === $illustration->getSnowboardTrick()) {
-            $illustration->setSnowboardTrick($this);
-        }
 
         return $this;
     }
