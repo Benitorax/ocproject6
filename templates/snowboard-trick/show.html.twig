@@ -26,22 +26,29 @@
                         </div>
                     </div>
                 </div>
-                <div class="row my-3">
-                    {% for image in trick.images %}
-                        <div class="col mb-3">
-                            <div class="mx-auto" style="width: 18rem; height: 11.9rem;">
-                                <img src="{{ image|imageToDataUrl }}" class="card-img-top" alt="Trick image">
+                <div class="d-block d-md-none">
+                    <div class="d-flex">
+                        <div class="badge bg-primary my-3 px-3 py-2 mx-auto js-media-button" style="font-size: 1rem">See medias</div>
+                    </div>
+                </div>
+                <div class="d-none d-md-block js-media-content">
+                    <div class="row my-3">
+                        {% for image in trick.images %}
+                            <div class="col mb-3">
+                                <div class="mx-auto" style="width: 18rem; height: 11.9rem;">
+                                    <img src="{{ image|imageToDataUrl }}" class="card-img-top" alt="Trick image">
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                    {% from 'video/embed_video.html.twig' import embed_video %}
-                    {% for video in trick.videos %}
-                        <div class="col mb-3">
-                            <div class="mx-auto" style="width: 18rem;">
-                                {{ embed_video(video.source, video.url) }}
+                        {% endfor %}
+                        {% from 'video/embed_video.html.twig' import embed_video %}
+                        {% for video in trick.videos %}
+                            <div class="col mb-3">
+                                <div class="mx-auto" style="width: 18rem;">
+                                    {{ embed_video(video.source, video.url) }}
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="row px-2 px-md-5 my-2">
                     <div class="col-12">
@@ -49,11 +56,11 @@
                         </div>
                     </div>
                     <div class="col-12 d-flex flex-wrap justify-content-around my-5">
-                        <div class="mb-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Published the {{ trick.createdAt|date('j F Y') }}</div>
+                        <div class="mb-2 px-3 py-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Published the {{ trick.createdAt|date('j F Y') }}</div>
                         {% if trick.createdAt is same as (trick.updatedAt) %}
                             <div class="mb-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Updated the {{ trick.updatedAt|date('j F Y') }}</div>
                         {% endif %}
-                        <div class="mb-2 badge bg-success rounded-pill" style="font-size: 0.8rem">{{ trick.categoryName }}</div>
+                        <div class="mb-2 px-3 py-2 badge bg-success rounded-pill" style="font-size: 0.8rem">{{ trick.categoryName }}</div>
                     </div>
                     <hr>
                     {% if app.user is null %}

@@ -50,21 +50,28 @@
                         {{ form_widget(form.illustration.file, {'attr': {'class': 'form-control d-none', 'id': 'illustration-file', 'accept': 'image/bmp,image/gif,image/jpeg,image/png'}}) }}    
                     </div>
                     <div class="col-12 mx-auto">
-                        <div class="mb-3">
-                            {% form_theme form.images with ['form/_collection_widget_edit.html.twig'] %}
-                            <label class="form-label label-collection py-2 mb-3">Images</label> 
-                            <div id="{{ form.images.vars.id }}" class="{{ form.images.vars.id }} js-collection-holder d-flex justify-content-between flex-wrap" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
-                                {{ form_widget(form.images) }}
+                        <div class="d-block d-md-none">
+                            <div class="d-flex">
+                                <div class="badge bg-primary mb-5 px-3 py-2 mx-auto js-media-button" style="font-size: 1rem">See medias</div>
                             </div>
-                            <button type="button" class="btn btn-link add_item_link my-2" data-collection-holder-class="{{ form.images.vars.id }}">+ Add image</button>
                         </div>
-                        <div class="mb-3">
-                            {% form_theme form.videos with ['form/_collection_widget_edit.html.twig'] %}
-                            <label class="form-label label-collection py-2 mb-3">Video</label> 
-                            <div id="{{ form.videos.vars.id }}" class="{{ form.videos.vars.id }} js-collection-holder d-flex justify-content-between flex-wrap" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
-                                {{ form_widget(form.videos) }}
+                        <div class="d-none d-md-block js-media-content">
+                            <div class="mb-3">
+                                {% form_theme form.images with ['form/_collection_widget_edit.html.twig'] %}
+                                <label class="form-label label-collection py-2 mb-3">Images</label> 
+                                <div id="{{ form.images.vars.id }}" class="{{ form.images.vars.id }} js-collection-holder d-flex justify-content-between flex-wrap" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+                                    {{ form_widget(form.images) }}
+                                </div>
+                                <button type="button" class="btn btn-link add_item_link my-2" data-collection-holder-class="{{ form.images.vars.id }}">+ Add image</button>
                             </div>
-                            <button type="button" class="btn btn-link add_item_link my-2" data-collection-holder-class="{{ form.videos.vars.id }}">+ Add video</button>
+                            <div class="mb-3">
+                                {% form_theme form.videos with ['form/_collection_widget_edit.html.twig'] %}
+                                <label class="form-label label-collection py-2 mb-3">Video</label> 
+                                <div id="{{ form.videos.vars.id }}" class="{{ form.videos.vars.id }} js-collection-holder d-flex justify-content-between flex-wrap" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
+                                    {{ form_widget(form.videos) }}
+                                </div>
+                                <button type="button" class="btn btn-link add_item_link my-2" data-collection-holder-class="{{ form.videos.vars.id }}">+ Add video</button>
+                            </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-9 mx-auto">
