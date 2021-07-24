@@ -18,7 +18,12 @@
                 </a>
             </div>
         </div>
-        <div id="tricks" class="container-fluid py-5">
+        <div class="container py-3 d-flex justify-content-center">
+            <a href="{{ path('app_snowboard_trick_create') }}">
+                <button class="btn btn-success">Add a new trick</button>
+            </a>
+        </div>
+        <div id="tricks" class="container-fluid pb-5">
             <div id="tricks-content" class="row justify-content-center position-relative">
                 {% for trick in tricks %}
                         <div class="col-auto mb-3">
