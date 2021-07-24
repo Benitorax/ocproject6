@@ -4,25 +4,31 @@
     let bannerImage = document.getElementById('image-banner');
     let bannerTitle = document.getElementById('title-banner');
     let reader = new FileReader();
+    let trickForm = document.querySelector('form[name="snowboard_trick"]');
 
     // change dynamically the banner image
-    illustrationFileInput.onchange = function(e) {
-        let image = illustrationFileInput.files[0];
+    if (illustrationFileInput != null) {
+        illustrationFileInput.onchange = function(e) {
+            let image = illustrationFileInput.files[0];
 
-        if (!image.type.includes('image/')) {
-            return;
-        }
+            if (!image.type.includes('image/')) {
+                return;
+            }
 
-        reader.onload = function(e) {
-            bannerImage.src = e.target.result;
+            reader.onload = function(e) {
+                bannerImage.src = e.target.result;
+            };
+            reader.readAsDataURL(image);
         };
-        reader.readAsDataURL(image);
-    };
+    }
+
 
     // change dynamically the title of the banner image
-    trickNameInput.addEventListener('input', function(e) {
-        bannerTitle.innerText = e.target.value;
-    });
+    if (trickNameInput != null) {
+        trickNameInput.addEventListener('input', function(e) {
+            bannerTitle.innerText = e.target.value;
+        });
+    }
 
     // ==========================================================================================================
 
@@ -37,7 +43,7 @@
         // add a delete link to all of the existing form div elements
         collectionHolder.querySelectorAll('div.card').forEach(function(element) {
             // add delete button and listener to form
-            addDeleteButtonToForm(element);
+            addListenerToDeleteButton(element);
             addListenerToFileInput(element);
         });
     });
@@ -71,7 +77,7 @@
 
         // Display the form in the page in an div, before the "Add" link
         let divElement = document.createElement("div");
-        divElement.classList.add('card', 'mx-auto');
+        divElement.classList.add('card', 'mx-auto', 'mb-3');
         divElement.style.width = "19.6rem";
         divElement.innerHTML = newForm;
 
@@ -83,18 +89,13 @@
             addListenerToFileInput(divElement);
         }
 
-        // add a delete link to the new form
-        addDeleteButtonToForm(divElement);
+        // add click listener to delete button
+        addListenerToDeleteButton(divElement);
     }
 
-    // add a delete button to form
-    function addDeleteButtonToForm(divElement) {
-        let buttonElement = document.createElement("button");
-        buttonElement.type = 'button';
-        buttonElement.classList.add("btn", "btn-danger", 'btn-sm');
-        buttonElement.innerText = 'Delete';
-        divElement.querySelector('.js-button').append(buttonElement);
-
+    // add click listener to delete button
+    function addListenerToDeleteButton(divElement) {
+        let buttonElement = divElement.querySelector(".js-icon-delete");
         buttonElement.addEventListener('click', function(e) {
             // remove the form div
             divElement.remove();
@@ -124,6 +125,19 @@
                 };
                 reader.readAsDataURL(image);
             }
+
+            // hide the input file and show the "edit" icon
+            inputElement.classList.add('d-none');
+            divElement.querySelector('.js-icon-edit').classList.remove('d-none');
         };
+    }
+
+    // add listener to delete illustration button
+    let illDeleteButton = document.querySelector('.js-icon-delete-illustration');
+    if (illDeleteButton !== null) {
+        illDeleteButton.addEventListener('click', function() {
+            document.getElementById('snowboard_trick_illustration_file').value = "";
+            bannerImage.src = "/images/default.png";
+        });
     }
 }();

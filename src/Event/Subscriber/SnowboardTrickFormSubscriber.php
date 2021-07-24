@@ -53,6 +53,11 @@ class SnowboardTrickFormSubscriber implements EventSubscriberInterface
     private function hydrateImage(Image $image): void
     {
         $file = $image->getFile();
+
+        if (null === $file) {
+            return;
+        }
+
         $image->setData($file->getContent())
             ->setFormat($file->getMimeType());
     }
@@ -69,7 +74,10 @@ class SnowboardTrickFormSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $trick->setIllustration($trick->getImages()[0]);
+        if ($trick->getImages()[0] instanceof Image) {
+            $trick->setIllustration(clone $trick->getImages()[0]);
+            return;
+        }
     }
 
     /**

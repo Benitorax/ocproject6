@@ -35,6 +35,18 @@ class SnowboardTrickManager
     }
 
     /**
+     * Save a edited trick.
+     */
+    public function saveEditedTrick(SnowboardTrick $trick): void
+    {
+        $datetime = new \DateTimeImmutable('now');
+        $trick->setUpdatedAt($datetime);
+
+        $this->entityManager->persist($trick);
+        $this->entityManager->flush();
+    }
+
+    /**
      * Delete the given trick.
      */
     public function deleteTrickBySlug(string $slug): void
@@ -46,6 +58,12 @@ class SnowboardTrickManager
         foreach ($comments as $comment) {
             $this->entityManager->remove($comment);
         }
+
+        foreach ($trick->getImages() as $image) {
+            $image->setSnowboardTrick(null);
+            $this->entityManager->remove($image);
+        }
+        $this->entityManager->flush();
 
         $this->entityManager->remove($trick->getIllustration()); /** @phpstan-ignore-line */
         $this->entityManager->remove($trick);

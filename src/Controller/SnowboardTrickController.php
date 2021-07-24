@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\DataFixtures\SnowboardTrickFixtures;
 use App\Form\CommentType;
-use App\Entity\SnowboardTrick;
 use App\Service\CommentManager;
 use App\Form\SnowboardTrickType;
 use App\Repository\SnowboardTrickRepository;
@@ -47,7 +45,7 @@ class SnowboardTrickController extends AbstractController
 
                 return $this->redirectToRoute('app_homepage');
             } elseif ($form->isSubmitted()) {
-                $this->addFlash('danger', 'Please, correct any field errors.');
+                $this->addFlash('danger', 'Please, correct any field with errors.');
             }
         }
 
@@ -102,11 +100,33 @@ class SnowboardTrickController extends AbstractController
     /**
      * Edit a trick.
      *
-     * @Route("/trick/name/edit", name="app_snowboard_trick_edit")
+     * @Route("/trick/{slug}/edit", name="app_snowboard_trick_edit")
      */
-    public function edit(): Response
-    {
+    public function edit(
+        string $slug,
+        Request $request,
+        SnowboardTrickRepository $trickRepository,
+        SnowboardTrickManager $trickManager
+    ): Response {
+        $trick = $trickRepository->findOneWithRelation($slug);
+        $form = $this->createForm(SnowboardTrickType::class, $trick);
+
+        if ($this->getUser()) {
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $trickManager->saveEditedTrick($form->getData());
+                $this->addFlash('success', 'A trick has been edited with success!');
+
+                return $this->redirectToRoute('app_homepage');
+            } elseif ($form->isSubmitted()) {
+                $this->addFlash('danger', 'Please, correct any field with errors.');
+            }
+        }
+
         return $this->render('snowboard-trick/edit.html.twig', [
+            'form' => $form->createView(),
+            'trick' => $trick
         ]);
     }
 
