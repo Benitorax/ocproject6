@@ -14,14 +14,7 @@
             errorEl.hidden = true;
         };
 
-        // sends ajax request when the form is submit
-        formEl.addEventListener("submit", function(e) {
-            e.preventDefault();
-            resetFormError();
-            submitForm();
-        });
-
-        async function submitForm() {
+        const submitForm = async function() {
             buttonEl.disabled = true;
             contentTextarea.readOnly = true;
 
@@ -59,6 +52,13 @@
                 errorEl.hidden = false;
             }
         }
+
+        // sends ajax request when the form is submit
+        formEl.addEventListener("submit", function(e) {
+            e.preventDefault();
+            resetFormError();
+            submitForm();
+        });
     }
 
     // add id to pagination links

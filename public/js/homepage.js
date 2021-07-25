@@ -40,27 +40,6 @@ import openDeleteModalCallback from "/js/modal.js";
     let spinner = document.querySelector(".js-spinner");
     tricks.dataset.index = 8;
 
-    scrollToElement(banner);
-
-    document.addEventListener("scroll", (event) => {
-        if (timer !== null) {
-            clearTimeout(timer);
-        }
-        timer = setTimeout(function() {
-            // hide or show arrow icon depending of tricks element in view port
-            if (isElementTopInViewPort(tricks)) {
-                hideElement(upIcon);
-            } else {
-                showElement(upIcon);
-            }
-
-            // load more tricks if spinner is inside viewport
-            if (isElementBottomInViewPort(spinner)) {
-                loadTricks();
-            }
-        }, 200);
-    });
-
     // load more tricks
     async function loadTricks() {
         try {
@@ -90,4 +69,25 @@ import openDeleteModalCallback from "/js/modal.js";
             spinner.innerHTML = "Failed to load more tricks.";
         }
     }
+
+    scrollToElement(banner);
+
+    document.addEventListener("scroll", (event) => {
+        if (timer !== null) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(function() {
+            // hide or show arrow icon depending of tricks element in view port
+            if (isElementTopInViewPort(tricks)) {
+                hideElement(upIcon);
+            } else {
+                showElement(upIcon);
+            }
+
+            // load more tricks if spinner is inside viewport
+            if (isElementBottomInViewPort(spinner)) {
+                loadTricks();
+            }
+        }, 200);
+    });
 })();
