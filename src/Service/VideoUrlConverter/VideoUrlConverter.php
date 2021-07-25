@@ -43,7 +43,7 @@ class VideoUrlConverter
     /**
      * @return null|AbstractConverter
      */
-    public function getConverter(string $tagOrUrl)
+    private function getConverter(string $tagOrUrl)
     {
         foreach ($this->urlConverters as $converter) {
             if ($converter->supports($tagOrUrl)) {

@@ -16,14 +16,14 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class CommentFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
-    private SnowboardTrickRepository $snowboardTrickRepository;
+    private SnowboardTrickRepository $trickRepository;
     private UserRepository $userRepository;
 
     public function __construct(
-        SnowboardTrickRepository $snowboardTrickRepository,
+        SnowboardTrickRepository $trickRepository,
         UserRepository $userRepository
     ) {
-        $this->snowboardTrickRepository = $snowboardTrickRepository;
+        $this->trickRepository = $trickRepository;
         $this->userRepository = $userRepository;
     }
 
@@ -85,7 +85,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface, Fixt
      */
     private function getAlltricks()
     {
-        return $this->snowboardTrickRepository->findAll();
+        return $this->trickRepository->findAll();
     }
 
     /**
