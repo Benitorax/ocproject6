@@ -17,15 +17,15 @@ Only logged users can submit trick and comment.
 ## Getting started
 ### Step 1: Configure environment variables
 Copy the `.env file` in project directory, rename it to `.env.local` and configure the following variables for:
-  - the database:
-  ```false
-  DATABASE_URL=
-  ```
+-   the database:
+```false
+DATABASE_URL=
+ ```
 
-  - and the emailing:
-  ```false
-  MAILER_DSN=
-  ```
+-   and the emailing:
+```false
+MAILER_DSN=
+```
 
 ### Step 2: Install components and librairies
 Run the following command:
