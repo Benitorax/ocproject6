@@ -1,4 +1,4 @@
-! function() {
+(function() {
     // submit comment via ajax ========================================
     let formEl = document.querySelector(".js-form-comment");
 
@@ -17,11 +17,11 @@
         // sends ajax request when the form is submit
         formEl.addEventListener("submit", function(e) {
             e.preventDefault();
+            resetFormError();
             submitForm();
         });
 
         async function submitForm() {
-            resetFormError();
             buttonEl.disabled = true;
             contentTextarea.readOnly = true;
 
@@ -33,7 +33,7 @@
                 });
 
                 let data = await response.json();
-                console.log(data, data.error);
+
                 // if 422 then sets error messages
                 if (response.status === 422) {
                     let error = data.error;
@@ -62,10 +62,10 @@
     }
 
     // add id to pagination links
-    let pagination = document.querySelector('.pagination');
+    let pagination = document.querySelector(".pagination");
     if (pagination !== null) {
-        pagination.querySelectorAll('a').forEach(function(element) {
-            element.href += '#comments';
+        pagination.querySelectorAll("a").forEach(function(element) {
+            element.href += "#comments";
         });
     }
-}()
+})();

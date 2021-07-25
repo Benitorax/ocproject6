@@ -37,8 +37,8 @@
                     <div class="row my-3">
                         {% for image in trick.images %}
                             <div class="col mb-3">
-                                <div class="mx-auto" style="width: 18rem; height: 11.9rem;">
-                                    <img src="{{ image|imageToDataUrl }}" class="card-img-top" alt="Trick image">
+                                <div class="mx-auto" style="width: 18rem;">
+                                    <img src="{{ image|imageToDataUrl }}" style="height: 11.9rem;" class="card-img-top" alt="Trick image">
                                 </div>
                             </div>
                         {% endfor %}
@@ -59,8 +59,8 @@
                     </div>
                     <div class="col-12 d-flex flex-wrap justify-content-around my-5">
                         <div class="mb-2 px-3 py-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Published the {{ trick.createdAt|date('j F Y') }}</div>
-                        {% if trick.createdAt is same as (trick.updatedAt) %}
-                            <div class="mb-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Updated the {{ trick.updatedAt|date('j F Y') }}</div>
+                        {% if trick.createdAt is not same as (trick.updatedAt) %}
+                            <div class="mb-2 px-3 py-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Updated the {{ trick.updatedAt|date('j F Y') }}</div>
                         {% endif %}
                         <div class="mb-2 px-3 py-2 badge bg-success rounded-pill" style="font-size: 0.8rem">{{ trick.categoryName }}</div>
                     </div>

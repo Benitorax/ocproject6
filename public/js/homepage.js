@@ -1,6 +1,6 @@
-import openDeleteModalCallback from '/js/modal.js';
+import openDeleteModalCallback from "/js/modal.js";
 
-! function() {
+(function() {
     function scrollToElement(element) {
         element.scrollIntoView();
     }
@@ -8,7 +8,9 @@ import openDeleteModalCallback from '/js/modal.js';
     // check if the top border of an element is inside viewport
     function isElementTopInViewPort(element) {
         let bounds = element.getBoundingClientRect();
-        if (bounds['top'] < 0) return false;
+        if (bounds["top"] < 0) {
+            return false;
+        }
 
         return true;
     }
@@ -16,29 +18,31 @@ import openDeleteModalCallback from '/js/modal.js';
     // check if the bottom border of an element is inside viewport
     function isElementBottomInViewPort(element) {
         let bounds = element.getBoundingClientRect();
-        if (bounds['bottom'] > window.innerHeight) return false;
+        if (bounds["bottom"] > window.innerHeight) {
+            return false;
+        }
 
         return true;
     }
 
     function showElement(element) {
-        element.style.display = 'block';
+        element.style.display = "block";
     }
 
     function hideElement(element) {
-        element.style.display = 'none';
+        element.style.display = "none";
     }
 
     let timer = null;
-    let banner = document.getElementById('image-banner');
-    let upIcon = document.getElementById('scroll-up-to-tricks');
-    let tricks = document.getElementById('tricks');
-    let spinner = document.querySelector('.js-spinner');
+    let banner = document.getElementById("image-banner");
+    let upIcon = document.getElementById("scroll-up-to-tricks");
+    let tricks = document.getElementById("tricks");
+    let spinner = document.querySelector(".js-spinner");
     tricks.dataset.index = 8;
 
     scrollToElement(banner);
 
-    document.addEventListener('scroll', event => {
+    document.addEventListener("scroll", (event) => {
         if (timer !== null) {
             clearTimeout(timer);
         }
@@ -61,21 +65,21 @@ import openDeleteModalCallback from '/js/modal.js';
     async function loadTricks() {
         try {
             let index = tricks.dataset.index;
-            let response = await fetch('/api/trick?index=' + index, {
+            let response = await fetch("/api/trick?index=" + index, {
                 method: "GET",
             });
 
-            tricks.dataset.index = parseInt(8) + parseInt(index);
+            tricks.dataset.index = parseInt(8, 10) + parseInt(index, 10);
             let data = await response.json();
 
             if (data.body.length > 0) {
                 const fragment = document.createRange().createContextualFragment(data.body);
-                document.getElementById('tricks-content').appendChild(fragment);
-                let deleteButtons = document.querySelectorAll('.js-modal-delete');
+                document.getElementById("tricks-content").appendChild(fragment);
+                let deleteButtons = document.querySelectorAll(".js-modal-delete");
 
                 deleteButtons.forEach(function(deleteButton) {
-                    deleteButton.removeEventListener('click', openDeleteModalCallback);
-                    deleteButton.addEventListener('click', openDeleteModalCallback);
+                    deleteButton.removeEventListener("click", openDeleteModalCallback);
+                    deleteButton.addEventListener("click", openDeleteModalCallback);
                 });
 
             } else {
@@ -83,7 +87,7 @@ import openDeleteModalCallback from '/js/modal.js';
             }
 
         } catch (error) {
-            spinner.innerHTML = 'Failed to load more tricks.';
+            spinner.innerHTML = "Failed to load more tricks.";
         }
     }
-}()
+})();

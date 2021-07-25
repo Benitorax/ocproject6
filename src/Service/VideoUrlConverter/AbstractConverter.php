@@ -30,7 +30,7 @@ abstract class AbstractConverter
     public function supports(string $tagOrUrl): bool
     {
         $regex = implode('|', static::URL_REGEX);
-        if (preg_match('#(' . $regex . ')#', $tagOrUrl, $matches)) {
+        if (preg_match('#(' . $regex . ')#', $tagOrUrl)) {
             return true;
         }
 
