@@ -50,7 +50,9 @@
         inputElement.onchange = function(e) {
             // remove error message
             let errorElement = divElement.querySelector(".js-error");
-            if (errorElement !== null) errorElement.remove();
+            if (errorElement !== null) {
+                errorElement.remove();
+            }
 
             // display image from file input
             let image = inputElement.files[0];
