@@ -42,7 +42,7 @@ class SnowboardTrickFormSubscriber implements EventSubscriberInterface
             $this->hydrateImage($image);
         }
 
-        $this->hydrateIllustration($trick);
+        $this->hydrateIllustration($trick, $event->getForm()['hasIllustration']->getData());
         $this->hydrateVideos($trick->getVideos());
         $trick->setSlug(Slugifier::slugify((string) $trick->getName()));
     }
@@ -65,19 +65,25 @@ class SnowboardTrickFormSubscriber implements EventSubscriberInterface
     /**
      * If illustration is null, then set the first element of images.
      */
-    private function hydrateIllustration(SnowboardTrick $trick): void
+    private function hydrateIllustration(SnowboardTrick $trick, bool $hasIllustration): void
     {
-        $illustration = $trick->getIllustration();
+        if ($hasIllustration) {
+            $illustration = $trick->getIllustration();
 
-        if ($illustration instanceof Image) {
-            $this->hydrateImage($illustration);
+            if ($illustration instanceof Image) {
+                $this->hydrateImage($illustration);
+            }
+
             return;
         }
 
         if ($trick->getImages()[0] instanceof Image) {
             $trick->setIllustration(clone $trick->getImages()[0]);
+
             return;
         }
+
+        $trick->setIllustration(null);
     }
 
     /**

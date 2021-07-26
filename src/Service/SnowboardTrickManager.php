@@ -65,7 +65,10 @@ class SnowboardTrickManager
         }
         $this->entityManager->flush();
 
-        $this->entityManager->remove($trick->getIllustration()); /** @phpstan-ignore-line */
+        if ($trick->getIllustration()) {
+            $this->entityManager->remove($trick->getIllustration()); /** @phpstan-ignore-line */
+        }
+
         $this->entityManager->remove($trick);
         $this->entityManager->flush();
     }

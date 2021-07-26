@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,13 +28,16 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     private UrlGeneratorInterface $urlGenerator;
     private RequestStack $requestStack;
+    private UserRepository $userRepository;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        UserRepository $userRepository
     ) {
         $this->urlGenerator = $urlGenerator;
         $this->requestStack = $requestStack;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -42,11 +46,23 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public function authenticate(Request $request): PassportInterface
     {
         $username = $request->request->get('username', '');
+        // $user = $this->userRepository->findOneBy(['username' => $username]);
+        // if ($user instanceof User && !$user->getIsActivated()) {
+        //     $username = '%';
+        // }
 
         $request->getSession()->set(Security::LAST_USERNAME, $username);
 
         return new Passport(
-            new UserBadge((string) $username),
+            new UserBadge((string) $username, function ($userIdentifier) {
+                $user = $this->userRepository->findOneBy(['username' => $userIdentifier]);
+                if ($user instanceof User && $user->getIsActivated()) {
+                    return $user;
+                }
+
+                // return a dummy User if account not activated yet.
+                return (new User())->setPassword('password');
+            }),
             new PasswordCredentials((string) $request->request->get('password', '')),
             [
                 new CsrfTokenBadge('authenticate', $request->get('_csrf_token')),

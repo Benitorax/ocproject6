@@ -51,7 +51,7 @@
                 errorEl.textContent = "Sorry, the website can't currently submit your comment. Please, try again later.";
                 errorEl.hidden = false;
             }
-        }
+        };
 
         // sends ajax request when the form is submit
         formEl.addEventListener("submit", function(e) {

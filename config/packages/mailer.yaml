@@ -4,6 +4,6 @@ framework:
         dsn: '%env(MAILER_DSN)%'
         envelope:
             # sender: 'contact@SnowTricks.com'
-            recipients: ['noah.fox@yopmail.com']
+            # recipients: ['noah.fox@yopmail.com']
         headers:
             # from: 'SnowTricks <contact@SnowTricks.com>'

@@ -14,6 +14,7 @@
                 return;
             }
 
+            document.getElementById('snowboard_trick_hasIllustration').checked = true;
             reader.onload = function(e) {
                 bannerImage.src = e.target.result;
             };
@@ -50,7 +51,9 @@
         inputElement.onchange = function(e) {
             // remove error message
             let errorElement = divElement.querySelector(".js-error");
-            if (errorElement !== null) errorElement.remove();
+            if (errorElement !== null) {
+                errorElement.remove();
+            }
 
             // display image from file input
             let image = inputElement.files[0];
@@ -138,6 +141,7 @@
     if (illDeleteButton !== null) {
         illDeleteButton.addEventListener("click", function() {
             document.getElementById("snowboard_trick_illustration_file").value = "";
+            document.getElementById('snowboard_trick_hasIllustration').checked = false;
             bannerImage.src = "/images/default.png";
         });
     }
