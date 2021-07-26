@@ -79,7 +79,11 @@ class SnowboardTrickFormSubscriber implements EventSubscriberInterface
 
         if ($trick->getImages()[0] instanceof Image) {
             $trick->setIllustration(clone $trick->getImages()[0]);
+
+            return;
         }
+
+        $trick->setIllustration(null);
     }
 
     /**

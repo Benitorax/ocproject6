@@ -46,7 +46,7 @@
                         {% for error in form.illustration.file.vars.errors %}
                             <div class="invalid-feedback mt-0 mb-1">{{ error.message }}</div>
                         {% endfor %}
-                        {{ form_widget(form.hasIllustration, {'attr': {'class': 'd-none', 'checked': 'checked'}}) }}
+                        {{ form_widget(form.hasIllustration, {'attr': {'class': 'd-none', 'checked': trick.images|length ? true : false}}) }}
                          <label class="form-label label-collection py-1 mb-0" hidden>Illustration</label>
                         {{ form_widget(form.illustration.file, {'attr': {'class': 'form-control d-none', 'id': 'illustration-file', 'accept': 'image/bmp,image/gif,image/jpeg,image/png'}}) }}    
                     </div>
