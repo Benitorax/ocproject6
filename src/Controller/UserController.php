@@ -44,10 +44,8 @@ class UserController extends AbstractController
      *
      * @Route("/account/activate/{token}", name="app_user_activate")
      */
-    public function activate(
-        string $token,
-        UserManager $userManager
-    ): Response {
+    public function activate(string $token, UserManager $userManager): Response
+    {
         try {
             $user = $userManager->validateTokenAndFetchUser(UserToken::SIGNUP, $token);
         } catch (\Exception $exception) {
