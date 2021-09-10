@@ -4,17 +4,18 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\UserPublicToken;
+use App\Event\Event\EmailEvent;
 use Symfony\Component\Mime\Address;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Mailer
 {
-    private MailerInterface $mailer;
+    private EventDispatcherInterface $dispatcher;
 
-    public function __construct(MailerInterface $mailer)
+    public function __construct(EventDispatcherInterface $dispatcher)
     {
-        $this->mailer = $mailer;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -29,7 +30,7 @@ class Mailer
             ])
         ;
 
-        $this->mailer->send($email);
+        $this->dispatcher->dispatch(new EmailEvent($email));
     }
 
     /**
@@ -44,7 +45,7 @@ class Mailer
             ])
         ;
 
-        $this->mailer->send($email);
+        $this->dispatcher->dispatch(new EmailEvent($email));
     }
 
     /**
