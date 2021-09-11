@@ -59,7 +59,7 @@
                     </div>
                     <div class="col-12 d-flex flex-wrap justify-content-around my-5">
                         <div class="mb-2 px-3 py-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Published the {{ trick.createdAt|date('j F Y') }}</div>
-                        {% if trick.createdAt is not same as (trick.updatedAt) %}
+                        {% if trick.createdAt|date('Y-m-d H:i:s') is not same as (trick.updatedAt|date('Y-m-d H:i:s')) %}
                             <div class="mb-2 px-3 py-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Updated the {{ trick.updatedAt|date('j F Y') }}</div>
                         {% endif %}
                         <div class="mb-2 px-3 py-2 badge bg-success rounded-pill" style="font-size: 0.8rem">{{ trick.categoryName }}</div>

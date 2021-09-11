@@ -90,7 +90,11 @@ class UserManager
      */
     public function modifyAvatar(User $user, Image $image): void
     {
-        $this->entityManager->remove($user->getAvatar()); /** @phpstan-ignore-line */
+        // Delete current avatar
+        if (null !== $user->getAvatar()) {
+            $this->entityManager->remove($user->getAvatar());
+        }
+
         $user->setAvatar($image);
         $this->entityManager->persist($image);
         $this->entityManager->flush();
@@ -101,7 +105,10 @@ class UserManager
      */
     public function deleteAvatar(User $user): void
     {
-        $this->entityManager->remove($user->getAvatar()); /** @phpstan-ignore-line */
+        if (null !== $user->getAvatar()) {
+            $this->entityManager->remove($user->getAvatar());
+        }
+
         $user->setAvatar(null);
         $this->entityManager->flush();
     }

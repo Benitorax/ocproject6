@@ -84,15 +84,17 @@ class UserManagerTest extends TestCase
         $this->entityManager->expects($this->once())->method('remove');
         $this->entityManager->expects($this->once())->method('persist');
         $this->entityManager->expects($this->once())->method('flush');
+        $user = (new User())->setAvatar(new Image());
 
-        $this->manager->modifyAvatar(new User(), new Image());
+        $this->manager->modifyAvatar($user, new Image());
     }
 
     public function testDeleteAvatar(): void
     {
         $this->entityManager->expects($this->once())->method('remove');
         $this->entityManager->expects($this->once())->method('flush');
+        $user = (new User())->setAvatar(new Image());
 
-        $this->manager->deleteAvatar(new User());
+        $this->manager->deleteAvatar($user);
     }
 }
