@@ -39,9 +39,7 @@ class SnowboardTrickManager
      */
     public function saveEditedTrick(SnowboardTrick $trick): void
     {
-        $datetime = new \DateTimeImmutable('now');
-        $trick->setUpdatedAt($datetime);
-
+        $trick->setUpdatedAt(new \DateTimeImmutable('now'));
         $this->entityManager->persist($trick);
         $this->entityManager->flush();
     }
