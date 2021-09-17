@@ -1,3 +1,4 @@
+{# prototype used when add dynamically a new entry #}
 {% block collection_entry_widget %}
     <div id="{{ form.vars.id }}" class="card-body" style="width: 19.6rem;">
         {% if form.parent.vars.name is same as('images') %}
@@ -48,11 +49,15 @@
 {% block collection_label %}
 {% endblock %}
 
+{# prototype used when display the list of entries #}
 {% block collection_widget %}
     {% for form in form.vars.form %}
         <div class="card mx-auto mb-3">
             <div id="{{ form.vars.id }}" class="card-body" style="width: 19.6rem;">
                 {% if form.parent.vars.name is same as('images') %}
+                    {% if form.vars.data.id is same as(0) %}
+                        <div class="invalid-feedback mt-0 mb-1 p-1 js-error">The image must be selected again with pencil icon</div>
+                    {% endif %}
                     {% for error in form.file.vars.errors %}
                         <div class="invalid-feedback mt-0 mb-1 p-1 js-error">{{ error.message }}</div>
                     {% endfor %}

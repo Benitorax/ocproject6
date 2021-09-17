@@ -58,7 +58,7 @@ symfony serve -d
 ```
 
 ## Third-party librairies
--   [Ramsey/Uuid](https://github.com/ramsey/uuid) for uuid inside model classes. 
+-   [Doctrine/Orm](https://github.com/doctrine/orm) for ORM and DBAL. 
 -   [Twig](https://github.com/twigphp/Twig) for the template engine.
 -   [FakerPHP](https://github.com/fakerphp/faker) to load fixtures.
 -   [PHPUnit](https://github.com/sebastianbergmann/phpunit) to run tests.
