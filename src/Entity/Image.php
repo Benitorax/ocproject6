@@ -50,6 +50,7 @@ class Image
 
     public function __construct()
     {
+        $this->id = 0;
         $this->uuid = Uuid::v4();
         $this->createdAt = new \DateTimeImmutable();
     }

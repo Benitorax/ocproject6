@@ -46,11 +46,6 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public function authenticate(Request $request): PassportInterface
     {
         $username = $request->request->get('username', '');
-        // $user = $this->userRepository->findOneBy(['username' => $username]);
-        // if ($user instanceof User && !$user->getIsActivated()) {
-        //     $username = '%';
-        // }
-
         $request->getSession()->set(Security::LAST_USERNAME, $username);
 
         return new Passport(
@@ -81,7 +76,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $user = $token->getUser();
         $session->getFlashBag()->add('success', 'Welcome ' . $user->getUsername() . '!');
 
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+        if ($targetPath = $this->getTargetPath($session, $firewallName)) {
             return new RedirectResponse($targetPath);
         }
 

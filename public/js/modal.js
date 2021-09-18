@@ -12,10 +12,8 @@ export default function openDeleteModalCallback(event) {
     openDeleteModal(event, deleteModal);
 }
 
-(function() {
-    let deleteButtons = document.querySelectorAll(".js-modal-delete");
+let deleteButtons = document.querySelectorAll(".js-modal-delete");
 
-    deleteButtons.forEach(function(deleteButton) {
-        deleteButton.addEventListener("click", openDeleteModalCallback);
-    });
-})();
+deleteButtons.forEach(function(deleteButton) {
+    deleteButton.addEventListener("click", openDeleteModalCallback);
+});

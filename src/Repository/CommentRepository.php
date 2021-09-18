@@ -64,7 +64,7 @@ class CommentRepository extends ServiceEntityRepository
             ->addSelect('a')
             ->andWhere('c.snowboardTrick = :trick')
             ->setParameter('trick', $trick)
-            ->orderBy('c.createdAt', 'ASC')
+            ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
         ;
     }

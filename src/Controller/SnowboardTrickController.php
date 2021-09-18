@@ -92,7 +92,7 @@ class SnowboardTrickController extends AbstractController
             'queryString' => http_build_query($request->query->all()),
             'pagination' => $commentManager->getPagination(
                 $trick,
-                $request->query->get('page') <= 0 ? 1 : (int) $request->query->get('page')
+                (int) $request->query->get('page') ?: 1
             )
         ]);
     }

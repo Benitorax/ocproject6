@@ -59,7 +59,7 @@
                     </div>
                     <div class="col-12 d-flex flex-wrap justify-content-around my-5">
                         <div class="mb-2 px-3 py-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Published the {{ trick.createdAt|date('j F Y') }}</div>
-                        {% if trick.createdAt is not same as (trick.updatedAt) %}
+                        {% if trick.createdAt|date('Y-m-d H:i:s') is not same as (trick.updatedAt|date('Y-m-d H:i:s')) %}
                             <div class="mb-2 px-3 py-2 badge bg-secondary rounded-pill" style="font-size: 0.8rem">Updated the {{ trick.updatedAt|date('j F Y') }}</div>
                         {% endif %}
                         <div class="mb-2 px-3 py-2 badge bg-success rounded-pill" style="font-size: 0.8rem">{{ trick.categoryName }}</div>
@@ -67,9 +67,8 @@
                     <hr>
                     {% if app.user is null %}
                         <div class="col-12 my-3 p-3">
-                            <p class="mb-3">You must be authenticated to submit a comment.</p>
-                            <p><a href="{{ path('app_login') }}">Click here</a> to log in.</p>
-                            <p>If you don't have an account, <a href="{{ path('app_user_create') }}">click here</a> to sign up.</p>
+                            {% import "security/_not_authenticated_block.html.twig" as _security %}
+                            {{ _security.content('You must be authenticated to submit a comment.') }}
                         </div>   
                     {% else %}
                         {{ form_start(form, {'attr': {
