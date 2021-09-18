@@ -67,9 +67,8 @@
                     <hr>
                     {% if app.user is null %}
                         <div class="col-12 my-3 p-3">
-                            <p class="mb-3">You must be authenticated to submit a comment.</p>
-                            <p><a href="{{ path('app_login') }}">Click here</a> to log in.</p>
-                            <p>If you don't have an account, <a href="{{ path('app_user_create') }}">click here</a> to sign up.</p>
+                            {% import "security/_not_authenticated_block.html.twig" as _security %}
+                            {{ _security.content('You must be authenticated to submit a comment.') }}
                         </div>   
                     {% else %}
                         {{ form_start(form, {'attr': {
